@@ -39,7 +39,7 @@ DEATH delivers his own lines:
              |     |      |
             /       \     |
            /_________\    |
-                                  — Reaper Man
+                           — Death, Reaper Man
 ```
 
 ## Usage
@@ -50,11 +50,16 @@ pratchett -s           short quotes only
 pratchett -r           rainbow
 pratchett -p           plain, no frame
 pratchett -d           DEATH says it
+pratchett -n           no colour (also --no-color, or NO_COLOR=1)
 pratchett vimes        a random quote containing "vimes"
 pratchett -v           version
 ```
 
 Options combine: `tp -r -d -s` is a short rainbow quote from DEATH.
+
+Colour is only used on a terminal, so `pratchett | pbcopy` or `pratchett > quote.txt`
+gives clean text. It also follows the [NO_COLOR](https://no-color.org) convention. On
+terminals narrower than 30 columns the frame is dropped, and DEATH needs 48.
 
 For a quote in every new terminal, add this to the end of `~/.zshrc`:
 
@@ -118,8 +123,18 @@ tools/build_quotes.py --update   # use the latest revisions (fails loudly if a p
 ```
 
 To add a quote, add `{"book": "…", "starts": "<its first words>"}` to
-`tools/picks.json` and rebuild. See the script's docstring for excerpts and the
+`tools/picks.json` and rebuild. Add `"speaker": "Death"` for DEATH's own lines so
+he delivers them. See the script's docstring for excerpts and the
 other options.
+
+## Tests
+
+```sh
+python3 tests/test_pratchett.py
+```
+
+Runs the command in a pseudo-terminal and checks colour handling, line widths
+from 12 to 200 columns, DEATH, and the flags.
 
 ## License
 

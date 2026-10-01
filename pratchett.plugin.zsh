@@ -4,7 +4,7 @@
 0="${${(M)0:#/*}:-$PWD/$0}"
 
 typeset -g PRATCHETT_DIR="${0:A:h}"
-typeset -g PRATCHETT_VERSION="1.0.0"
+typeset -g PRATCHETT_VERSION="1.1.0"
 typeset -ga _pratchett_quotes
 
 # Load the quotes once: entries are separated by lines containing only "%"
@@ -16,11 +16,17 @@ _pratchett_load() {
   _pratchett_quotes=(${_pratchett_quotes:#})
 }
 
-# Word-wrap $2 to width $1 (multibyte-aware); result in $reply
+# Word-wrap $2 to width $1 (multibyte-aware), hard-breaking words longer
+# than a line; result in $reply
 _pratchett_wrap() {
   local w=$1 line= word
   reply=()
   for word in ${=2}; do
+    while (( ${(m)#word} > w )); do
+      [[ -n $line ]] && reply+=("$line") && line=
+      reply+=("${word[1,w]}")
+      word=${word[w+1,-1]}
+    done
     if [[ -z $line ]]; then line=$word
     elif (( ${(m)#line} + 1 + ${(m)#word} <= w )); then line+=" $word"
     else reply+=("$line"); line=$word
@@ -29,7 +35,7 @@ _pratchett_wrap() {
   [[ -n $line ]] && reply+=("$line")
 }
 
-# Bold Death's SMALL CAPS words, italicise the rest
+# Bold DEATH's SMALL CAPS words, italicise the rest
 _pratchett_style() {
   local word out=
   for word in ${=1}; do
@@ -55,23 +61,34 @@ _pratchett_rainbow() {
   print -rn -- "$out"
 }
 
+_pratchett_usage() {
+  print -r -- "usage: pratchett [-s] [-d] [-p] [-r] [-n] [-v] [search words...]
+  -s  short quotes only      -d  DEATH says it
+  -p  plain, no frame        -r  rainbow
+  -n  no colour (also: --no-color, NO_COLOR=1, or output that isn't a terminal)
+  -v  print version
+  search words pick a random quote containing them (case-insensitive)"
+}
+
 pratchett() {
   emulate -L zsh
   setopt extendedglob
-  local opt short= death= plain= rainbow= OPTIND
-  while getopts ":sdprvh" opt; do
+  local opt short= death= plain= rainbow= nocolor= OPTIND
+  local -a args=("$@")
+  args=("${(@)args/#--no-colo(u|)r/-n}")
+  args=("${(@)args/#--help/-h}")
+  args=("${(@)args/#--version/-v}")
+  set -- "${args[@]}"
+  while getopts ":sdprnvh" opt; do
     case $opt in
       s) short=1 ;;
       d) death=1 ;;
       p) plain=1 ;;
       r) rainbow=1 ;;
+      n) nocolor=1 ;;
       v) print -r -- "pratchett $PRATCHETT_VERSION"; return ;;
-      *) print -r -- "usage: pratchett [-s] [-d] [-p] [-r] [-v] [search words...]
-  -s  short quotes only      -d  Death says it
-  -p  plain, no frame        -r  rainbow
-  -v  print version
-  search words pick a random quote containing them (case-insensitive)"
-         [[ $opt == h ]]; return ;;
+      h) _pratchett_usage; return ;;
+      *) _pratchett_usage >&2; return 1 ;;
     esac
   done
   shift $(( OPTIND - 1 ))
@@ -94,31 +111,32 @@ pratchett() {
   fi
   local raw=${pool[RANDOM % $#pool + 1]}
 
-  # Split into quote body and "— Book" attribution
+  # Split into quote body and "— [Speaker, ]Book" attribution
   local -a lines=("${(@f)raw}")
   local source=${${lines[-1]}##[[:space:]]#}
   local body=${(j: :)${(@)lines[1,-2]}}
   body=${${body##[[:space:]]#}%%[[:space:]]#}
 
+  # Colour only for a terminal, and never when asked not to (https://no-color.org)
+  [[ -n $NO_COLOR || ! -t 1 ]] && nocolor=1
+  local reset= dim= ital= accent=
+  if [[ -z $nocolor ]]; then
+    local -a palette=(173 109 139 108 179 67 175 144)
+    reset=$'\e[0m' dim=$'\e[2m' ital=$'\e[3m'
+    accent=$'\e[38;5;'${palette[RANDOM % $#palette + 1]}m
+  else
+    rainbow=
+  fi
+
   local cols=${COLUMNS:-0}
   (( cols > 0 )) || cols=$(tput cols 2>/dev/null || print 80)
-  local w=$(( cols - 8 ))
-  (( w > 66 )) && w=66
-  (( w < 20 )) && w=20
-  _pratchett_wrap $w "$body"
-  local -a text=("${reply[@]}")
-  # Shrink the frame to fit short quotes
-  local longest=${(m)#source} t
-  for t in "${text[@]}"; do (( ${(m)#t} > longest )) && longest=${(m)#t}; done
-  (( longest < w )) && w=$longest
+  (( cols > 0 )) || cols=80
+  # A frame needs room; on narrow terminals print plain text instead
+  (( cols < 30 )) && plain=1
 
-  local reset=$'\e[0m' dim=$'\e[2m' ital=$'\e[3m'
-  local -a palette=(173 109 139 108 179 67 175 144)
-  local accent=$'\e[38;5;'${palette[RANDOM % $#palette + 1]}m
-
-  # Death speaks for himself (in capitals), or when asked
-  if [[ -z $plain && ( -n $death || $body =~ '[A-Z]{2,}[ ,.?!]+[A-Z]{2,}[ ,.?!]+[A-Z]{2,}' ) ]] \
-      && (( $+commands[cowsay] )); then
+  # DEATH delivers his own lines (and any line with -d), given room and cowsay
+  if [[ -z $plain && ( -n $death || $source == "— Death,"* ) ]] \
+      && (( cols >= 48 && $+commands[cowsay] )); then
     local art l
     integer i=0
     _pratchett_wrap 40 "$body"
@@ -130,45 +148,66 @@ pratchett() {
     else
       print -r -- "$accent$art$reset"
     fi
-    print -r -- "${(l:46:)source} ${dim}${note}${reset}"
+    integer gap=$(( 46 - ${(m)#source} ))
+    (( gap < 0 )) && gap=0
+    print -r -- "${(l:gap:)}$source${note:+ $dim$note$reset}"
     return
   fi
 
-  local line styled pad
-  local -a out=()
+  # Text width: inside a frame (2 border + 4 padding) or indented by 2 when plain
+  local w=$(( cols - (plain ? 4 : 8) ))
+  (( w > 66 )) && w=66
+  (( w < 10 )) && w=10
+  _pratchett_wrap $w "$body"
+  local -a text=("${reply[@]}")
+  _pratchett_wrap $w "$source"
+  local -a srctext=("${reply[@]}")
+  # Shrink to fit short quotes
+  local longest=0 t
+  for t in "${text[@]}" "${srctext[@]}"; do (( ${(m)#t} > longest )) && longest=${(m)#t}; done
+  (( longest < w )) && w=$longest
+
+  local line styled
+  local -a out=() srcout=()
   integer i
   for (( i = 1; i <= $#text; i++ )); do
     line=${text[i]}
-    pad=$(( w - ${(m)#line} ))
     if [[ -n $rainbow ]]; then
       styled=$ital$(_pratchett_rainbow "$line" $(( (i - 1) * 4 )))$reset
+    elif [[ -n $nocolor ]]; then
+      styled=$line
     else
       styled=$ital$(_pratchett_style "$line")$reset
     fi
-    out+=("$styled${(l:pad:)}")
+    out+=("$styled${(l:w - ${(m)#line}:)}")
   done
-  local srcline="${(l:w - ${(m)#source}:)}${dim}${source}${reset}"
+  # Right-align the attribution
+  for line in "${srctext[@]}"; do
+    srcout+=("${(l:w - ${(m)#line}:)}$dim$line$reset")
+  done
 
   if [[ -n $plain ]]; then
     print
     print -rl -- "  "${^out}
     print
-    print -r -- "  $srcline"
-    [[ -n $note ]] && print -r -- "  ${dim}${note}${reset}"
+    print -rl -- "  "${^srcout}
+    [[ -n $note ]] && print -r -- "  $dim$note$reset"
     print
     return
   fi
 
-  local bar=${(pl:w + 4::─:)}
+  local bar=${(pl:w + 4::─:)} blank="$accent│$reset${(l:w + 4:)}$accent│$reset"
   print -r -- "$accent╭$bar╮$reset"
-  print -r -- "$accent│$reset${(l:w+4:)}$accent│$reset"
+  print -r -- "$blank"
   for line in "${out[@]}"; do
     print -r -- "$accent│$reset  $line  $accent│$reset"
   done
-  print -r -- "$accent│$reset${(l:w+4:)}$accent│$reset"
-  print -r -- "$accent│$reset  $srcline  $accent│$reset"
+  print -r -- "$blank"
+  for line in "${srcout[@]}"; do
+    print -r -- "$accent│$reset  $line  $accent│$reset"
+  done
   print -r -- "$accent╰$bar╯$reset"
-  [[ -n $note ]] && print -r -- "${(l:w + 6 - ${#note}:)}${dim}${note}${reset}"
+  [[ -n $note ]] && print -r -- "${(l:w + 6 - ${#note}:)}$dim$note$reset"
 }
 
 # Short alias; set PRATCHETT_NO_ALIAS=1 before loading the plugin to skip it

@@ -12,6 +12,8 @@ text can be checked against a cited source. The picks live in tools/picks.json:
       fix an obvious typo in the source before using it
   {"book": "Diggers", "page": "Terry Pratchett", "text": "..."}
       a quote from another page, kept only if the text appears there verbatim
+  ... "speaker": "Death"
+      who says it; shown as "— Death, Reaper Man" (and DEATH's lines get the drawing)
 
 The Wikiquote revisions used are pinned in tools/revisions.json, so a rebuild is
 reproducible. Pass --update to fetch the latest revisions instead.
@@ -119,6 +121,10 @@ def tidy(t):
     return re.sub(r"([.!?…—”’\"'])(“)", r"\1 \2", t)          # space between dialogue lines
 
 
+def attribution(p):
+    return f"{p['speaker']}, {p['book']}" if p.get("speaker") else p["book"]
+
+
 def main():
     update = "--update" in sys.argv[1:]
     revfile = TOOLS / "revisions.json"
@@ -137,7 +143,7 @@ def main():
             if p["text"] not in clean(pages[p["page"]]):
                 problems.append(f"not found on {p['page']}: {p['text'][:60]}")
                 continue
-            entries.append((p["text"], p["book"]))
+            entries.append((p["text"], attribution(p)))
             continue
         hits = [c for c in cands if c["book"] == p["book"] and c["text"].startswith(p["starts"])]
         if len(hits) != 1:
@@ -154,7 +160,7 @@ def main():
             except ValueError:
                 problems.append(f"excerpt not found in {p['book']}: {p['from']}..{p['to']}")
                 continue
-        entries.append((t, p["book"]))
+        entries.append((t, attribution(p)))
 
     if problems:
         print("Some picks no longer match Wikiquote:", *problems, sep="\n  ", file=sys.stderr)

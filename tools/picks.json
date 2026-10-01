@@ -125,11 +125,13 @@
  },
  {
   "book": "Reaper Man",
-  "starts": "THERE IS NO HOPE BUT US. THERE IS NO MERCY BU"
+  "starts": "THERE IS NO HOPE BUT US. THERE IS NO MERCY BU",
+  "speaker": "Death"
  },
  {
   "book": "Reaper Man",
-  "starts": "LORD, WHAT CAN THE HARVEST HOPE FOR, IF NOT F"
+  "starts": "LORD, WHAT CAN THE HARVEST HOPE FOR, IF NOT F",
+  "speaker": "Death"
  },
  {
   "book": "Reaper Man",
@@ -287,13 +289,15 @@
   "book": "Hogfather",
   "starts": "\"All right,\" said Susan, \"I'm not stupid. You",
   "from": "HUMANS NEED FANTASY",
-  "to": "RISING APE."
+  "to": "RISING APE.",
+  "speaker": "Death"
  },
  {
   "book": "Hogfather",
   "starts": "\"All right,\" said Susan, \"I'm not stupid. You",
   "from": "YOU NEED TO BELIEVE",
-  "to": "HOW ELSE CAN THEY BECOME?"
+  "to": "HOW ELSE CAN THEY BECOME?",
+  "speaker": "Death"
  },
  {
   "book": "Jingo",
@@ -621,8 +625,9 @@
   "text": "The trouble with having an open mind, of course, is that people will insist on coming along and trying to put things in it."
  },
  {
-  "book": "Death, on Terry Pratchett's Twitter account, 12 March 2015",
+  "book": "Terry Pratchett's Twitter account, 12 March 2015",
   "page": "Terry Pratchett",
-  "text": "AT LAST, SIR TERRY, WE MUST WALK TOGETHER."
+  "text": "AT LAST, SIR TERRY, WE MUST WALK TOGETHER.",
+  "speaker": "Death"
  }
 ]
