@@ -1,0 +1,18 @@
+name: quotes
+
+# Weekly check that every quote still matches Wikiquote's latest text.
+# Fails if a pick can no longer be found, or if any quote's wording changed.
+on:
+  schedule:
+    - cron: "17 6 * * 1"
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Rebuild from the latest Wikiquote revisions
+        run: python3 tools/build_quotes.py --update
+      - name: Quotes unchanged
+        run: git diff --exit-code quotes/

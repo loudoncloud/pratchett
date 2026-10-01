@@ -4,7 +4,7 @@
 0="${${(M)0:#/*}:-$PWD/$0}"
 
 typeset -g PRATCHETT_DIR="${0:A:h}"
-typeset -g PRATCHETT_VERSION="1.1.0"
+typeset -g PRATCHETT_VERSION="1.2.0"
 typeset -ga _pratchett_quotes
 
 # Load the quotes once: entries are separated by lines containing only "%"
@@ -73,6 +73,14 @@ _pratchett_usage() {
 pratchett() {
   emulate -L zsh
   setopt extendedglob
+  # Widths and the frame need a UTF-8 locale; borrow one if the shell has none
+  local _loc
+  if (( ${#${:-─}} != 1 )); then
+    for _loc in C.UTF-8 en_US.UTF-8; do
+      local LC_ALL=$_loc
+      (( ${#${:-─}} == 1 )) && break
+    done
+  fi
   local opt short= death= plain= rainbow= nocolor= OPTIND
   local -a args=("$@")
   args=("${(@)args/#--no-colo(u|)r/-n}")
@@ -102,7 +110,7 @@ pratchett() {
   (( short )) && pool=(${pool:#?(#c161,)})
   local note=
   if (( $# )); then
-    pool=(${(M)pool:#(#i)*${(b)*}*})
+    pool=(${(M)pool:#(#i)*$**})
     if (( ! $#pool )); then
       print -r -- "No quote mentions “$*”. Ook."
       return 1
@@ -148,9 +156,12 @@ pratchett() {
     else
       print -r -- "$accent$art$reset"
     fi
-    integer gap=$(( 46 - ${(m)#source} ))
-    (( gap < 0 )) && gap=0
-    print -r -- "${(l:gap:)}$source${note:+ $dim$note$reset}"
+    # Attribution right-aligned under the drawing, wrapped if it's long
+    _pratchett_wrap 46 "$source"
+    for l in "${reply[@]}"; do
+      print -r -- "${(l:46 - ${(m)#l}:)}$l"
+    done
+    [[ -n $note ]] && print -r -- "${(l:46 - ${#note}:)}$dim$note$reset"
     return
   fi
 
@@ -209,6 +220,16 @@ pratchett() {
   print -r -- "$accent╰$bar╯$reset"
   [[ -n $note ]] && print -r -- "${(l:w + 6 - ${#note}:)}$dim$note$reset"
 }
+
+# Tab completion: make _pratchett findable, and register it now if compinit
+# has already run (oh-my-zsh and most plugin managers load plugins before it)
+if [[ -r $PRATCHETT_DIR/_pratchett ]]; then
+  fpath=("$PRATCHETT_DIR" ${fpath:#$PRATCHETT_DIR})
+fi
+if [[ -r $PRATCHETT_DIR/_pratchett ]] && (( $+functions[compdef] )); then
+  autoload -Uz _pratchett
+  compdef _pratchett pratchett
+fi
 
 # Short alias; set PRATCHETT_NO_ALIAS=1 before loading the plugin to skip it
 if [[ -z $PRATCHETT_NO_ALIAS ]]; then

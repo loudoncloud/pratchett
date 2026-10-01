@@ -1,0 +1,35 @@
+name: test
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install zsh and cowsay (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -yq zsh cowsay
+          echo /usr/games >> "$GITHUB_PATH"
+
+      - name: Install cowsay (macOS)
+        if: runner.os == 'macOS'
+        run: brew install cowsay
+
+      - name: Syntax check
+        run: zsh -n pratchett.plugin.zsh _pratchett bin/pratchett
+
+      - name: Command tests
+        run: python3 tests/test_pratchett.py
+
+      - name: Tab-completion tests
+        run: python3 tests/test_completion.py

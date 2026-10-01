@@ -1,5 +1,7 @@
 # pratchett
 
+[![test](https://github.com/loudoncloud/pratchett/actions/workflows/test.yml/badge.svg)](https://github.com/loudoncloud/pratchett/actions/workflows/test.yml)
+
 Random Terry Pratchett quotes for your terminal: 152 lines from across the
 Discworld, each one copied verbatim from [Wikiquote](https://en.wikiquote.org/wiki/Discworld)
 with the book it came from.
@@ -56,6 +58,10 @@ pratchett -v           version
 ```
 
 Options combine: `tp -r -d -s` is a short rainbow quote from DEATH.
+
+Tab completion (zsh) covers the options, and book titles for searching:
+`pratchett Nigh<Tab>` completes to `Night\ Watch`. It works with every install
+method below, for both `pratchett` and `tp`.
 
 Colour is only used on a terminal, so `pratchett | pbcopy` or `pratchett > quote.txt`
 gives clean text. It also follows the [NO_COLOR](https://no-color.org) convention. On
@@ -130,11 +136,13 @@ other options.
 ## Tests
 
 ```sh
-python3 tests/test_pratchett.py
+python3 tests/test_pratchett.py    # the command: colour, widths, DEATH, locale, flags
+python3 tests/test_completion.py   # tab completion, driven through a real zsh
 ```
 
-Runs the command in a pseudo-terminal and checks colour handling, line widths
-from 12 to 200 columns, DEATH, and the flags.
+Both run in a pseudo-terminal. The width checks render every quote at widths from
+12 to 200 columns. CI runs both on macOS and Linux for every push, and a weekly job
+checks that every quote still matches Wikiquote.
 
 ## License
 

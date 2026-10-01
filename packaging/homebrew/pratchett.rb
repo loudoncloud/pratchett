@@ -8,8 +8,9 @@ class Pratchett < Formula
   uses_from_macos "zsh"
 
   def install
-    libexec.install "pratchett.plugin.zsh", "death.cow", "quotes", "bin"
+    libexec.install "pratchett.plugin.zsh", "_pratchett", "death.cow", "quotes", "bin"
     bin.install_symlink libexec/"bin/pratchett"
+    zsh_completion.install_symlink libexec/"_pratchett"
   end
 
   def caveats
@@ -24,6 +25,7 @@ class Pratchett < Formula
   end
 
   test do
+    assert_path_exists zsh_completion/"_pratchett"
     assert_match "pratchett #{version}", shell_output("#{bin}/pratchett -v")
     assert_match "— Jingo", shell_output("#{bin}/pratchett -p 'whole sword'")
   end

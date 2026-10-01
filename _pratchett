@@ -1,0 +1,27 @@
+#compdef pratchett
+
+# Zsh completion for pratchett (and the tp alias): flags, plus book titles as
+# search words, since a search also matches the "— Book" line of each quote.
+
+local dir=$PRATCHETT_DIR exe
+if [[ -z $dir ]] && exe=$(whence -p pratchett); then
+  dir=${exe:A:h:h}   # bin/pratchett -> the directory holding quotes/
+fi
+
+local -a books
+if [[ -r $dir/quotes/pratchett ]]; then
+  books=(${(u)${${(M)${(f)"$(<$dir/quotes/pratchett)"}:#    — *}#    — }})
+  books=(${(u)books#Death, })
+fi
+
+_arguments -s -S \
+  '(- *)'{-h,--help}'[show usage]' \
+  '(- *)'{-v,--version}'[print version]' \
+  '-s[short quotes only]' \
+  '-d[DEATH says it]' \
+  '-p[plain, no frame]' \
+  '-r[rainbow]' \
+  '(-n --no-color)'{-n,--no-color}'[no colour]' \
+  '*: :->search' && return
+
+[[ $state == search ]] && _wanted books expl 'book title (or any search words)' compadd -a books
