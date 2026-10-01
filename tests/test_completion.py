@@ -9,6 +9,8 @@ ANSI = re.compile(r"\x1b\[[0-9;?]*[a-zA-Z]|\x1b[=>]|\r")
 def complete(setup, typed, wait=1.5):
     """Start zsh with `setup` as its .zshrc, type `typed` + Tab, return the screen text."""
     home = tempfile.mkdtemp()
+    # Debian/Ubuntu's /etc/zsh/zshrc runs its own compinit unless told not to
+    Path(home, ".zshenv").write_text("skip_global_compinit=1\n")
     Path(home, ".zshrc").write_text(setup + "\nPS1='> '\n")
     env = dict(os.environ, ZDOTDIR=home, HOME=home, TERM="xterm", COLUMNS="100")
     env.pop("PRATCHETT_DIR", None)
