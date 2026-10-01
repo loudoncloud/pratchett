@@ -1,0 +1,22 @@
+##
+## DEATH of the Discworld, hooded, with scythe. For the pratchett plugin.
+##
+$the_cow = <<"EOC";
+    $thoughts
+     $thoughts                        ____________
+      $thoughts      _______        .'            `.
+           .'       `.     /                \\
+          /  .-----.  \\   /
+         |  / () () \\  |  |
+         |  |   ^   |  |  |
+         |  \\ ||||| /  |  |
+          \\  `-----'  /   |
+          /`.       .'\\   |
+         /   `-._.-'   \\  |
+        /   /|     |\\   \\=|
+       (___/ |     | \\___)|
+             |     |      |
+             |     |      |
+            /       \\     |
+           /_________\\    |
+EOC

@@ -1,0 +1,3 @@
+#!/usr/bin/env zsh
+# Standalone entry point, so pratchett works from any shell (bash, fish, ...)
+PRATCHETT_NO_ALIAS=1 source "${0:A:h:h}/pratchett.plugin.zsh" && pratchett "$@"
