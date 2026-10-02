@@ -3,7 +3,7 @@
 Each release's notes are taken from its section here, so add a `## x.y.z` section
 before tagging `vx.y.z`.
 
-## 1.4.0
+## 1.4.0 (2026-10-02)
 
 - `-b BOOK` (or `--book BOOK`): quotes from one book. Any case, and part of the
   title is enough (`-b jingo`, `-b "wee free"`); combines with `-s` and search words.
