@@ -1,8 +1,11 @@
 """End-to-end checks for the pratchett command. Run: python3 tests/test_pratchett.py"""
-import os, pty, re, subprocess, sys, unicodedata
+import os, pty, re, shutil, subprocess, sys, tempfile, unicodedata
 from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 B = str(ROOT / "bin" / "pratchett")
+# Keep the tests' no-repeat history away from the real one
+HISTDIR = tempfile.mkdtemp()
+os.environ["PRATCHETT_HISTORY_FILE"] = os.path.join(HISTDIR, "history")
 VERSION = re.search(r'PRATCHETT_VERSION="([^"]+)"', (ROOT / "pratchett.plugin.zsh").read_text())[1]
 ESC = re.compile(r"\x1b\[[0-9;]*m")
 
@@ -117,6 +120,37 @@ check("-b with -s", code == 0 and by("Mort", out))
 code, out, _ = res(["-p", "--", "--helpful"])
 check("words after -- are search words, not options", code == 1 and "--helpful" in out)
 
+print("no repeats")
+hist = os.environ["PRATCHETT_HISTORY_FILE"]
+def first_lines(args, n):
+    return [run(["-p", *args]).split("\n")[1] for _ in range(n)]
+if os.path.exists(hist): os.remove(hist)
+seen = first_lines([], 50)
+check("50 random quotes in a row: no repeats", len(set(seen)) == 50)
+with open(hist) as f: lines = f.read().splitlines()
+check("history records what was shown", len(lines) == 50)
+first_lines([], 70)
+with open(hist) as f: lines = f.read().splitlines()
+check("history keeps only the last 100", len(lines) == 100)
+os.remove(hist)
+jingo = first_lines(["-b", "Jingo"], 14)
+check("7-quote book: no repeat within any 3 picks in a row",
+      all(jingo[i] not in jingo[i - 3:i] for i in range(3, 14)))
+check("1-quote book still works every time",
+      all("Mister Lipwig" in l or "drop everything" in l for l in first_lines(["-b", "Raising Steam"], 3)))
+check("1-match search still works every time", all("whole sword" in l for l in first_lines(["whole sword"], 3)))
+os.remove(hist)
+out = subprocess.run([B, "-p"], capture_output=True, text=True, env=dict(os.environ, PRATCHETT_NO_HISTORY="1")).stdout
+check("PRATCHETT_NO_HISTORY=1: quote shown, nothing recorded", "—" in out and not os.path.exists(hist))
+r = subprocess.run([B, "-p"], capture_output=True, text=True,
+                   env=dict(os.environ, PRATCHETT_HISTORY_FILE="/nonexistent-root/x/history"))
+check("unwritable history: quote still shown, exit 0, no error", r.returncode == 0 and "—" in r.stdout and not r.stderr)
+leaky = [o for o in ([], ["-b", "Jingo"], ["-s"], ["vimes"], ["-b", "Jingo", "-s"])
+         for _ in range(3) if re.match(r"^\w+=", run(["-p", *o]).lstrip("\n"))]
+check("no stray variable dumps in the output (q=...)", not leaky)
+code, out, _ = res(["-p", "-b", "  jingo "])
+check("-b ignores surrounding spaces", code == 0 and by("Jingo", out))
+
 print("locale")
 for loc in ({}, {"LANG": "C"}, {"LC_ALL": "C"}):
     out = subprocess.run([B, "-s", "damp handshake"], capture_output=True, text=True,
@@ -135,4 +169,5 @@ nozsh = subprocess.run([B, "-s"], capture_output=True, text=True, env={"PATH": "
 check("without zsh: helpful message on stderr, exit 127",
       nozsh.returncode == 127 and "needs zsh" in nozsh.stderr and not nozsh.stdout)
 check("search miss exits 1", subprocess.run([B, "zzqq"], capture_output=True).returncode == 1)
+shutil.rmtree(HISTDIR, ignore_errors=True)
 print("ALL PASS" if ok else "SOME FAILED"); sys.exit(0 if ok else 1)

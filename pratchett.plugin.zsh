@@ -4,7 +4,7 @@
 0="${${(M)0:#/*}:-$PWD/$0}"
 
 typeset -g PRATCHETT_DIR="${0:A:h}"
-typeset -g PRATCHETT_VERSION="1.4.0"
+typeset -g PRATCHETT_VERSION="1.5.0"
 typeset -ga _pratchett_quotes
 
 # Load the quotes once: entries are separated by lines containing only "%"
@@ -93,7 +93,7 @@ _pratchett_usage() {
 
 pratchett() {
   emulate -L zsh
-  setopt extendedglob
+  setopt extendedglob typesetsilent
   # Widths and the frame need a UTF-8 locale; borrow one if the shell has none
   local _loc
   if (( ${#${:-─}} != 1 )); then
@@ -124,7 +124,7 @@ pratchett() {
   set -- "${args[@]}"
   while getopts ":sdprnvhLb:" opt; do
     case $opt in
-      b) book=$OPTARG ;;
+      b) book=${${OPTARG##[[:space:]]#}%%[[:space:]]#} ;;
       L) listbooks=1 ;;
       :) print -u2 -r -- "pratchett: -$OPTARG needs a book title, e.g. -b \"Night Watch\" (see --books)"
          return 1 ;;
@@ -197,7 +197,32 @@ pratchett() {
       note="(1 of $#pool quotes$scope)"
     fi
   fi
+  # No repeats: skip quotes shown recently (up to 50, or half of what's on offer),
+  # unless that would leave nothing. PRATCHETT_NO_HISTORY=1 turns this off.
+  local histfile=${PRATCHETT_HISTORY_FILE:-${XDG_STATE_HOME:-$HOME/.local/state}/pratchett/history}
+  local -a recent=()
+  [[ -z $PRATCHETT_NO_HISTORY && -r $histfile ]] && recent=("${(@f)$(<$histfile)}")
+  integer window=$(( $#pool / 2 ))
+  (( window > 50 )) && window=50
+  (( window > $#recent )) && window=$#recent
+  if (( window > 0 )); then
+    local -A seen=()
+    local key entry
+    for key in "${(@)recent[$#recent - window + 1, -1]}"; do seen[$key]=1; done
+    local -a fresh=()
+    for entry in "${pool[@]}"; do
+      (( ${+seen[${${entry%%$'\n'*}[1,60]}]} )) || fresh+=("$entry")
+    done
+    (( $#fresh )) && pool=("${fresh[@]}")
+  fi
   local raw=${pool[RANDOM % $#pool + 1]}
+  if [[ -z $PRATCHETT_NO_HISTORY ]]; then
+    # Remember it (keeping the last 100); never fail over this
+    {
+      mkdir -p "${histfile:h}" &&
+        print -rl -- "${(@)recent[$(( $#recent > 99 ? $#recent - 98 : 1 )), -1]}" "${${raw%%$'\n'*}[1,60]}" > "$histfile"
+    } 2>/dev/null
+  fi
 
   # Split into quote body and "— [Speaker, ]Book" attribution
   local -a lines=("${(@f)raw}")

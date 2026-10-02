@@ -66,6 +66,11 @@ Tab completion (zsh) covers the options, and book titles for `-b` and for search
 `pratchett -b Nigh<Tab>` completes to `Night\ Watch`. It works with every install
 method below, for both `pratchett` and `tp`.
 
+Quotes don't come round again too soon: random picks skip the ones shown recently
+(the last 50, or half of what's available when you narrow it down with `-b` or a
+search). The list lives in `~/.local/state/pratchett/history`; set
+`PRATCHETT_NO_HISTORY=1` to turn this off.
+
 Colour is only used on a terminal, so `pratchett | pbcopy` or `pratchett > quote.txt`
 gives clean text. It also follows the [NO_COLOR](https://no-color.org) convention. On
 terminals narrower than 30 columns the frame is dropped, and DEATH needs 48.

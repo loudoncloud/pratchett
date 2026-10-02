@@ -5,6 +5,10 @@ before tagging `vx.y.z`.
 
 ## 1.5.0
 
+- No repeats: random picks skip recently shown quotes (the last 50, or half of
+  what's available with `-b` or a search), remembered in
+  `~/.local/state/pratchett/history`. `PRATCHETT_NO_HISTORY=1` turns it off.
+- `-b` ignores spaces around the title.
 - Eight more quotes name who says them ("— Vimes, Thud!", "— Granny Weatherwax,
   The Wee Free Men"), where the quote's own text makes it clear. Speakers are never
   added from memory.
