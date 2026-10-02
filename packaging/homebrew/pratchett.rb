@@ -1,8 +1,8 @@
 class Pratchett < Formula
   desc "Random Terry Pratchett quotes for your terminal, with a little help from DEATH"
   homepage "https://github.com/loudoncloud/pratchett"
-  url "https://github.com/loudoncloud/pratchett/archive/refs/tags/v1.1.0.tar.gz"
-  sha256 "227fb816f436be32ba2616f3ada76835a20f03556fbb96a9de6a9165509316c3"
+  url "https://github.com/loudoncloud/pratchett/archive/refs/tags/v1.2.0.tar.gz"
+  sha256 "b6b90bf8f7597c51090b7f8aad489db1b9647bb5258593c4883143c6343ea2d6"
   license all_of: ["MIT", "CC-BY-SA-4.0"]
 
   uses_from_macos "zsh"
