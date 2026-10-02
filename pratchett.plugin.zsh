@@ -4,7 +4,7 @@
 0="${${(M)0:#/*}:-$PWD/$0}"
 
 typeset -g PRATCHETT_DIR="${0:A:h}"
-typeset -g PRATCHETT_VERSION="1.5.0"
+typeset -g PRATCHETT_VERSION="1.6.0"
 typeset -ga _pratchett_quotes
 
 # Load the quotes once: entries are separated by lines containing only "%"
@@ -79,12 +79,24 @@ _pratchett_books() {
   done
 }
 
+# Days since 1970-01-01 for a Y M D date, in $REPLY (Howard Hinnant's days_from_civil)
+_pratchett_days() {
+  integer y=$1 m=$2 d=$3 era yoe doy doe
+  (( y -= m <= 2 ))
+  (( era = (y >= 0 ? y : y - 399) / 400 ))
+  (( yoe = y - era * 400 ))
+  (( doy = (153 * (m + (m > 2 ? -3 : 9)) + 2) / 5 + d - 1 ))
+  (( doe = yoe * 365 + yoe / 4 - yoe / 100 + doy ))
+  REPLY=$(( era * 146097 + doe - 719468 ))
+}
+
 _pratchett_usage() {
-  print -r -- "usage: pratchett [-s] [-d] [-p] [-r] [-n] [-b BOOK] [search words...]
+  print -r -- "usage: pratchett [-s] [-t] [-d] [-p] [-r] [-n] [-b BOOK] [search words...]
        pratchett --books | -v | -h
   -s  short quotes only      -d  DEATH says it
   -p  plain, no frame        -r  rainbow
   -n  no colour (also: --no-color, NO_COLOR=1, or output that isn't a terminal)
+  -t  quote of the day: the same quote all day (combines with -b, -s and search)
   -b  quotes from one book; part of the title is enough (-b jingo, -b \"wee free\")
   --books  list the books, with how many quotes each has
   -v  print version
@@ -102,7 +114,7 @@ pratchett() {
       (( ${#${:-─}} == 1 )) && break
     done
   fi
-  local opt short= death= plain= rainbow= nocolor= book= listbooks= OPTIND
+  local opt short= today= death= plain= rainbow= nocolor= book= listbooks= OPTIND
   # Long options, matched as whole words and only before "--"
   local -a args=()
   local a
@@ -122,8 +134,9 @@ pratchett() {
     args+=("$a")
   done
   set -- "${args[@]}"
-  while getopts ":sdprnvhLb:" opt; do
+  while getopts ":stdprnvhLb:" opt; do
     case $opt in
+      t) today=1 ;;
       b) book=${${OPTARG##[[:space:]]#}%%[[:space:]]#} ;;
       L) listbooks=1 ;;
       :) print -u2 -r -- "pratchett: -$OPTARG needs a book title, e.g. -b \"Night Watch\" (see --books)"
@@ -197,12 +210,34 @@ pratchett() {
       note="(1 of $#pool quotes$scope)"
     fi
   fi
+  if [[ -n $today ]]; then
+    # Quote of the day: step through the pool a fixed stride per day, so every
+    # quote comes round before any repeats.
+    # PRATCHETT_TODAY=YYYY-MM-DD overrides the date (used by the tests).
+    local date=$PRATCHETT_TODAY
+    if [[ $date != <1900-9999>-<1-12>-<1-31> ]]; then
+      zmodload -F zsh/datetime b:strftime p:EPOCHSECONDS
+      strftime -s date '%Y-%m-%d' $EPOCHSECONDS
+    fi
+    _pratchett_days ${(s:-:)date}
+    # The step must share no factor with the pool size, or some quotes never come up
+    integer step=73 gcd_x gcd_y gcd_r
+    while :; do
+      (( gcd_x = step, gcd_y = $#pool ))
+      while (( gcd_y )); do (( gcd_r = gcd_x % gcd_y, gcd_x = gcd_y, gcd_y = gcd_r )); done
+      (( gcd_x == 1 )) && break
+      (( step++ ))
+    done
+    local raw=${pool[(REPLY * step) % $#pool + 1]}
+    note="(quote of the day${scope:+$scope})"
+  fi
+
   # No repeats: skip quotes shown recently (up to 50, or half of what's on offer),
   # unless that would leave nothing. PRATCHETT_NO_HISTORY=1 turns this off.
   local histfile=${PRATCHETT_HISTORY_FILE:-${XDG_STATE_HOME:-$HOME/.local/state}/pratchett/history}
   local -a recent=()
   [[ -z $PRATCHETT_NO_HISTORY && -r $histfile ]] && recent=("${(@f)$(<$histfile)}")
-  integer window=$(( $#pool / 2 ))
+  integer window=$(( today ? 0 : $#pool / 2 ))
   (( window > 50 )) && window=50
   (( window > $#recent )) && window=$#recent
   if (( window > 0 )); then
@@ -215,8 +250,8 @@ pratchett() {
     done
     (( $#fresh )) && pool=("${fresh[@]}")
   fi
-  local raw=${pool[RANDOM % $#pool + 1]}
-  if [[ -z $PRATCHETT_NO_HISTORY ]]; then
+  [[ -z $today ]] && local raw=${pool[RANDOM % $#pool + 1]}
+  if [[ -z $PRATCHETT_NO_HISTORY && -z $today ]]; then
     # Remember it (keeping the last 100); never fail over this
     {
       mkdir -p "${histfile:h}" &&

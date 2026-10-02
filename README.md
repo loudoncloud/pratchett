@@ -54,6 +54,7 @@ pratchett -p           plain, no frame
 pratchett -d           DEATH says it
 pratchett -n           no colour (also --no-color, or NO_COLOR=1)
 pratchett vimes        a random quote containing "vimes"
+pratchett -t           quote of the day: the same one all day, a new one tomorrow
 pratchett -b jingo     a quote from one book (part of the title is enough)
 pratchett --books      list the books, with how many quotes each has
 pratchett -v           version
@@ -65,6 +66,9 @@ Options combine: `tp -r -d -s` is a short rainbow quote from DEATH, and
 Tab completion (zsh) covers the options, and book titles for `-b` and for searching:
 `pratchett -b Nigh<Tab>` completes to `Night\ Watch`. It works with every install
 method below, for both `pratchett` and `tp`.
+
+With `-t`, everyone on the same version sees the same quote on the same day, and it
+works through every quote before showing one again. It combines with `-b` and `-s`.
 
 Quotes don't come round again too soon: random picks skip the ones shown recently
 (the last 50, or half of what's available when you narrow it down with `-b` or a
@@ -93,6 +97,9 @@ is optional; without it, DEATH's lines appear in a frame like the rest.
 ```sh
 brew install loudoncloud/tap/pratchett
 ```
+
+(It's in its own tap, so `brew search pratchett` won't find it until the tap is
+added; that's normal for formulae outside Homebrew's core collection.)
 
 This gives you a `pratchett` command that works from any shell. In zsh, add
 `source $(brew --prefix)/opt/pratchett/libexec/pratchett.plugin.zsh` to `~/.zshrc`

@@ -151,6 +151,31 @@ check("no stray variable dumps in the output (q=...)", not leaky)
 code, out, _ = res(["-p", "-b", "  jingo "])
 check("-b ignores surrounding spaces", code == 0 and by("Jingo", out))
 
+print("quote of the day")
+import datetime
+def qotd(day, *args):
+    env = dict(os.environ, COLUMNS="80", PRATCHETT_TODAY=day)
+    return subprocess.run([B, "-t", "-p", *args], capture_output=True, text=True, env=env).stdout
+check("same day: the same quote every time", len({qotd("2026-10-02") for _ in range(4)}) == 1)
+start = datetime.date(2026, 10, 2)
+days = [qotd(str(start + datetime.timedelta(n))) for n in range(len(QUOTES))]
+check(f"{len(QUOTES)} days in a row: {len(QUOTES)} different quotes", len(set(days)) == len(QUOTES))
+check("says it's the quote of the day", "(quote of the day)" in days[0])
+nshort = len([q for q in QUOTES if len(q) <= 160])
+sdays = {qotd(str(start + datetime.timedelta(n)), "-s") for n in range(nshort)}
+check(f"-t -s: {nshort} days in a row, {nshort} different short quotes", len(sdays) == nshort)
+os.path.exists(hist) and os.remove(hist)
+qotd("2026-10-02")
+check("-t leaves the no-repeat history alone", not os.path.exists(hist))
+out = qotd("2026-10-02", "-b", "Jingo")
+check("-t -b: the day's quote from that book", by("Jingo", out) and "(quote of the day from Jingo)" in out)
+check("-t -b: same all day", out == qotd("2026-10-02", "-b", "Jingo"))
+check("-t -s: a short quote", len(qotd("2026-10-02", "-s").strip()) < 260)
+real_today = subprocess.run([B, "-t", "-p"], capture_output=True, text=True, env=dict(os.environ, COLUMNS="80")).stdout
+check("a malformed PRATCHETT_TODAY falls back to today", qotd("not-a-date") == real_today)
+check("today's date is used when not overridden",
+      real_today == qotd(datetime.date.today().isoformat()))
+
 print("locale")
 for loc in ({}, {"LANG": "C"}, {"LC_ALL": "C"}):
     out = subprocess.run([B, "-s", "damp handshake"], capture_output=True, text=True,

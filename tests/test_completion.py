@@ -49,7 +49,7 @@ after = f"{init}\n{plugin}"           # plugin loaded after compinit
 for label, rc in (("plugin before compinit", before), ("plugin after compinit", after)):
     s = complete(rc, "pratchett -")
     check(f"{label}: flags listed with descriptions",
-          all(x in s for x in ("short quotes only", "DEATH says it", "rainbow", "no colour")), s)
+          all(x in s for x in ("short quotes only", "quote of the day", "DEATH says it", "rainbow", "no colour")), s)
 s = complete(before, "tp -")
 check("tp alias completes flags too", "short quotes only" in s, s)
 s = complete(before, "pratchett Nigh")

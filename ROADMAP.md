@@ -25,7 +25,7 @@ Tick an item in the same commit that completes it.
 - [x] Tab completion (zsh) for options and book titles (1.2.0)
 - [x] `tp -b <book>`: quotes from one book only; `tp --books` to list the books (1.4.0)
 - [x] No repeats: remember recently shown quotes so the startup quote doesn't come round again soon (1.5.0)
-- [ ] `tp -t`: quote of the day (the same quote all day, chosen by the date)
+- [x] `tp -t`: quote of the day (the same quote all day, chosen by the date) (1.6.0)
 - [ ] More characters drawn by cowsay for their own lines: the Librarian ("Ook."), the Luggage
 - [ ] `tp -c <character>`: quotes by one character (needs the speaker field below)
 - [ ] Bash and fish completion, for people using the standalone command from other shells
@@ -42,3 +42,7 @@ Tick an item in the same commit that completes it.
 
 - [ ] List in [awesome-zsh-plugins](https://github.com/unixorn/awesome-zsh-plugins)
 - [ ] Propose to oh-my-zsh as a built-in plugin, as `hitchhiker` is (the quotes' CC BY-SA licence may need discussing)
+- [ ] Get into homebrew/core, so `brew search pratchett` finds it without the tap. Needs, per Homebrew's
+  [Package Acceptance Policy](https://docs.brew.sh/Package-Acceptance-Policy): a repo at least 30 days old
+  (from 31 October 2026), and 75 stars, 30 forks or 30 watchers if someone else submits it
+  (225 / 90 / 90 if we submit it ourselves).

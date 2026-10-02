@@ -18,6 +18,7 @@ _arguments -s -S \
   '(- *)'{-h,--help}'[show usage]' \
   '(- *)'{-v,--version}'[print version]' \
   '-s[short quotes only]' \
+  '-t[quote of the day]' \
   '-d[DEATH says it]' \
   '-p[plain, no frame]' \
   '-r[rainbow]' \
