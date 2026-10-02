@@ -13,7 +13,10 @@ text can be checked against a cited source. The picks live in tools/picks.json:
   {"book": "Diggers", "page": "Terry Pratchett", "text": "..."}
       a quote from another page, kept only if the text appears there verbatim
   ... "speaker": "Death"
-      who says it; shown as "— Death, Reaper Man" (and DEATH's lines get the drawing)
+      who says it; shown as "— Death, Reaper Man" (and DEATH's lines get the drawing).
+      Only when the source makes it clear: the whole quote is one character
+      speaking and the text names them ("said Gaspode"), or it's DEATH's small caps.
+      Not from memory, and not for exchanges between two named characters.
 
 The Wikiquote revisions used are pinned in tools/revisions.json, so a rebuild is
 reproducible. Pass --update to fetch the latest revisions instead.

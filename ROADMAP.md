@@ -33,6 +33,7 @@ Tick an item in the same commit that completes it.
 ## Content
 
 - [ ] Add `speaker` for more quotes (Granny Weatherwax, Vimes, Vetinari…) where the source makes it clear, shown as "— Granny Weatherwax, Carpe Jugulum"
+  - 13 of 152 so far (1.5.0): the rest are narration, exchanges between two characters, or lines the source doesn't attribute. More will need new quotes that name their speaker.
 - [ ] More quotes, and a better balance across books (some have seven, some one)
 - [ ] Keep where each quote is in the book (Wikiquote has page numbers; chapters where available)
 - [ ] Check quotes against the books themselves, a few at a time

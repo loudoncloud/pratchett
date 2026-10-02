@@ -73,6 +73,9 @@ no_cowsay = subprocess.run([B, "THERE IS NO HOPE"], capture_output=True, text=Tr
 check("without cowsay, DEATH's lines are framed", "╭" in no_cowsay and "(___/" not in no_cowsay)
 
 print("books")
+def by(book, out):
+    """The output's attribution is this book, with or without a speaker."""
+    return re.search(r"— (?:[^,\n]+, )?" + re.escape(book) + r"\s*$", out, re.M) is not None
 def res(args):
     r = subprocess.run([B, *args], capture_output=True, text=True, env=dict(os.environ, COLUMNS="80"))
     return r.returncode, r.stdout, r.stderr
@@ -89,10 +92,10 @@ for book, n in counts.items():
 else:
     check("-b <exact title> only gives that book, for every book", True)
 code, out, _ = res(["-p", "-b", "jingo"])
-check("-b is case-insensitive and partial (jingo)", code == 0 and "— Jingo" in out)
+check("-b is case-insensitive and partial (jingo)", code == 0 and by("Jingo", out))
 check("note says which book (1 of 7 quotes from Jingo)", f"(1 of {counts['Jingo']} quotes from Jingo)" in out)
 code, out, _ = res(["-p", "-b", "wee free"])
-check("-b matches part of a title (wee free → The Wee Free Men)", code == 0 and "— The Wee Free Men" in out)
+check("-b matches part of a title (wee free → The Wee Free Men)", code == 0 and by("The Wee Free Men", out))
 code, out, err = res(["-b", "the"])
 check("-b ambiguous: lists the matching books, exit 1", code == 1 and "matches" in err and "Hogfather" in err and not out)
 code, out, err = res(["-b", "zzz"])
@@ -100,17 +103,17 @@ check("-b unknown: error on stderr, exit 1", code == 1 and "no book matches" in 
 code, out, err = res(["-b"])
 check("-b with no title: error, exit 1", code == 1 and "needs a book title" in err)
 code, out, _ = res(["-p", "--book=Thud!"])
-check("--book=TITLE works", code == 0 and "— Thud!" in out)
+check("--book=TITLE works", code == 0 and by("Thud!", out))
 code, out, _ = res(["-p", "--book", "Thud!"])
-check("--book TITLE works", code == 0 and "— Thud!" in out)
+check("--book TITLE works", code == 0 and by("Thud!", out))
 code, out, _ = res(["-p", "-b", "Terry Pratchett's Twitter account (12 March 2015)"])
 check("-b exact title with brackets and apostrophe", code == 0 and "WALK TOGETHER" in out)
 code, out, _ = res(["-p", "-b", "Going Postal", "crowd"])
-check("-b with search words", code == 0 and "crowd" in out and "— Going Postal" in out)
+check("-b with search words", code == 0 and "crowd" in out and by("Going Postal", out))
 code, out, _ = res(["-b", "Jingo", "zzqq"])
 check("-b with a search that misses: says so, exit 1", code == 1 and "No quote from Jingo mentions" in out)
 code, out, _ = res(["-p", "-s", "-b", "Mort"])
-check("-b with -s", code == 0 and "— Mort" in out)
+check("-b with -s", code == 0 and by("Mort", out))
 code, out, _ = res(["-p", "--", "--helpful"])
 check("words after -- are search words, not options", code == 1 and "--helpful" in out)
 

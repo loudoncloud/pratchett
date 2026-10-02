@@ -3,6 +3,12 @@
 Each release's notes are taken from its section here, so add a `## x.y.z` section
 before tagging `vx.y.z`.
 
+## 1.5.0
+
+- Eight more quotes name who says them ("— Vimes, Thud!", "— Granny Weatherwax,
+  The Wee Free Men"), where the quote's own text makes it clear. Speakers are never
+  added from memory.
+
 ## 1.4.0 (2026-10-02)
 
 - `-b BOOK` (or `--book BOOK`): quotes from one book. Any case, and part of the

@@ -283,7 +283,8 @@
  },
  {
   "book": "Hogfather",
-  "starts": "\"Madam, we're wizards,\" said the Senior Wrang"
+  "starts": "\"Madam, we're wizards,\" said the Senior Wrang",
+  "speaker": "Senior Wrangler"
  },
  {
   "book": "Hogfather",
@@ -371,7 +372,8 @@
  },
  {
   "book": "The Fifth Elephant",
-  "starts": "“Really,” said Gaspode. “Nothing good starts "
+  "starts": "“Really,” said Gaspode. “Nothing good starts ",
+  "speaker": "Gaspode"
  },
  {
   "book": "The Fifth Elephant",
@@ -399,7 +401,8 @@
  },
  {
   "book": "Thief of Time",
-  "starts": "“Questions don’t have to make sense, Vincent,"
+  "starts": "“Questions don’t have to make sense, Vincent,",
+  "speaker": "Susan"
  },
  {
   "book": "Thief of Time",
@@ -433,7 +436,8 @@
  },
  {
   "book": "The Amazing Maurice and His Educated Rodents",
-  "starts": "“Listen, Peaches, trickery is what humans are"
+  "starts": "“Listen, Peaches, trickery is what humans are",
+  "speaker": "Maurice"
  },
  {
   "book": "The Amazing Maurice and His Educated Rodents",
@@ -477,7 +481,8 @@
   "book": "The Wee Free Men",
   "starts": "“Well, I must go. I hope we shall meet again.",
   "from": "“Good. Now…if you trust",
-  "to": "Good-bye.”"
+  "to": "Good-bye.”",
+  "speaker": "Miss Tick"
  },
  {
   "book": "The Wee Free Men",
@@ -485,7 +490,8 @@
  },
  {
   "book": "The Wee Free Men",
-  "starts": "“The thing about witchcraft,” said Mistress W"
+  "starts": "“The thing about witchcraft,” said Mistress W",
+  "speaker": "Granny Weatherwax"
  },
  {
   "book": "Monstrous Regiment",
@@ -541,7 +547,8 @@
  },
  {
   "book": "Thud!",
-  "starts": "Vimes leaned back. “Don’t try to put me at my"
+  "starts": "Vimes leaned back. “Don’t try to put me at my",
+  "speaker": "Vimes"
  },
  {
   "book": "Thud!",
@@ -613,7 +620,8 @@
  },
  {
   "book": "The Shepherd's Crown",
-  "starts": "Tiffany sighed. “Being a witch is a man’s job"
+  "starts": "Tiffany sighed. “Being a witch is a man’s job",
+  "speaker": "Tiffany Aching"
  },
  {
   "book": "The Science of Discworld",
