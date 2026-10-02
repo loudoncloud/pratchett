@@ -47,10 +47,10 @@ jobs:
             echo "::error::The TAP_TOKEN secret is empty or not set (see packaging/homebrew/README.md)"
             exit 1
           fi
-          perm=$(curl -sf -H "Authorization: Bearer $TAP_TOKEN" \
-            https://api.github.com/repos/loudoncloud/homebrew-tap | jq -r '.permissions.push // false') || perm=error
-          if [ "$perm" != "true" ]; then
-            echo "::error::TAP_TOKEN can't push to loudoncloud/homebrew-tap (got: $perm). Check its repository access and Contents: Read and write."
+          # A dry-run push needs write access to start, but changes nothing
+          git clone -q --depth 1 "https://x-access-token:$TAP_TOKEN@github.com/loudoncloud/homebrew-tap" /tmp/tap-check
+          if ! git -C /tmp/tap-check push --dry-run -q origin HEAD:refs/heads/main; then
+            echo "::error::TAP_TOKEN can't push to loudoncloud/homebrew-tap. Check its repository access and Contents: Read and write."
             exit 1
           fi
           echo "TAP_TOKEN can push to the tap"
