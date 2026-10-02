@@ -3,7 +3,7 @@
 Each release's notes are taken from its section here, so add a `## x.y.z` section
 before tagging `vx.y.z`.
 
-## 1.5.0
+## 1.5.0 (2026-10-02)
 
 - No repeats: random picks skip recently shown quotes (the last 50, or half of
   what's available with `-b` or a search), remembered in
