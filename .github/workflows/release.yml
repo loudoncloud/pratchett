@@ -1,0 +1,88 @@
+name: release
+
+# Push a tag like v1.3.0 to release: run the tests, publish the GitHub release
+# with notes from CHANGELOG.md, update the Homebrew tap, then install from the
+# tap to check it. Needs a TAP_TOKEN secret that can push to the tap repo.
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  test:
+    uses: ./.github/workflows/test.yml
+
+  release:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Tag matches the version in the plugin
+        run: |
+          tag=${GITHUB_REF_NAME#v}
+          ver=$(sed -n 's/^typeset -g PRATCHETT_VERSION="\(.*\)"/\1/p' pratchett.plugin.zsh)
+          if [ "$tag" != "$ver" ]; then
+            echo "::error::Tag is v$tag but PRATCHETT_VERSION in pratchett.plugin.zsh is $ver"
+            exit 1
+          fi
+          echo "VERSION=$ver" >> "$GITHUB_ENV"
+
+      - name: Release notes from CHANGELOG.md
+        run: |
+          awk -v v="$VERSION" '/^## / { f = ($2 == v) ; next } f' CHANGELOG.md > notes.md
+          if ! grep -q '[^[:space:]]' notes.md; then
+            echo "::error::CHANGELOG.md has no '## $VERSION' section"
+            exit 1
+          fi
+          cat notes.md
+
+      - name: Create the GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1 ||
+            gh release create "$GITHUB_REF_NAME" --title "$GITHUB_REF_NAME" --notes-file notes.md
+
+      - name: Checksum of the release tarball
+        run: |
+          url="https://github.com/$GITHUB_REPOSITORY/archive/refs/tags/$GITHUB_REF_NAME.tar.gz"
+          sha=$(curl -sfL --retry 5 "$url" | sha256sum | cut -d' ' -f1)
+          echo "SHA256=$sha" >> "$GITHUB_ENV"
+          echo "$url -> $sha"
+
+      - name: Update the Homebrew tap
+        env:
+          TAP_TOKEN: ${{ secrets.TAP_TOKEN }}
+        run: |
+          if [ -z "$TAP_TOKEN" ]; then
+            echo "::error::The TAP_TOKEN secret is not set (see packaging/homebrew/README.md)"
+            exit 1
+          fi
+          author_name=$(git log -1 --format=%an)
+          author_email=$(git log -1 --format=%ae)
+          git clone -q "https://x-access-token:$TAP_TOKEN@github.com/loudoncloud/homebrew-tap" tap
+          # Fill in the template, dropping its two header comment lines
+          sed -e '/^# Template:/,/^# result to/d' -e "s/@VERSION@/$VERSION/" -e "s/@SHA256@/$SHA256/" \
+            packaging/homebrew/pratchett.rb > tap/Formula/pratchett.rb
+          cd tap
+          if git diff --quiet; then
+            echo "Tap already has pratchett $VERSION"
+            exit 0
+          fi
+          git -c user.name="$author_name" -c user.email="$author_email" \
+            commit -qam "pratchett $VERSION"
+          git push -q
+
+  verify:
+    needs: release
+    runs-on: macos-latest
+    steps:
+      - name: Install from the tap, test and audit
+        run: |
+          brew install loudoncloud/tap/pratchett
+          pratchett -v | grep -Fx "pratchett ${GITHUB_REF_NAME#v}"
+          brew test loudoncloud/tap/pratchett
+          brew audit --strict --online loudoncloud/tap/pratchett

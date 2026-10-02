@@ -10,7 +10,7 @@ Tick an item in the same commit that completes it.
 - [x] Tag DEATH's lines explicitly with a `speaker` instead of guessing from capitals (1.1.0)
 - [x] Correct frame without a UTF-8 locale (1.2.0)
 - [x] Searches containing `?`, `*` or `[` (1.2.0)
-- [ ] Clear error when zsh isn't installed (common on Linux), and a note in the README
+- [x] Clear error when zsh isn't installed (common on Linux), and a note in the README (1.3.0)
 
 ## Testing and releases
 
@@ -18,7 +18,7 @@ Tick an item in the same commit that completes it.
 - [x] Tab-completion tests driven through a real zsh (1.2.0)
 - [x] CI on macOS and Linux for every push (1.2.0)
 - [x] Weekly check that every quote still matches Wikiquote (1.2.0)
-- [ ] Automate releases: on a version tag, create the GitHub release, compute the checksum and update the Homebrew tap
+- [x] Automate releases: on a version tag, create the GitHub release, compute the checksum and update the Homebrew tap (1.3.0)
 
 ## Features
 

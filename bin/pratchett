@@ -1,3 +1,13 @@
-#!/usr/bin/env zsh
-# Standalone entry point, so pratchett works from any shell (bash, fish, ...)
-PRATCHETT_NO_ALIAS=1 source "${0:A:h:h}/pratchett.plugin.zsh" && pratchett "$@"
+#!/bin/sh
+# Standalone entry point, so pratchett works from any shell (bash, fish, ...).
+# Plain sh, so a missing zsh gets a helpful message instead of "env: zsh: not found".
+if ! command -v zsh >/dev/null 2>&1; then
+  printf '%s\n' >&2 \
+    "pratchett: this needs zsh, which isn't installed." \
+    "  Debian/Ubuntu: sudo apt install zsh     Fedora: sudo dnf install zsh" \
+    "  Arch:          sudo pacman -S zsh       Alpine: sudo apk add zsh" \
+    "(You don't need to switch your shell to zsh; it just has to be installed.)"
+  exit 127
+fi
+# zsh resolves symlinks (${1:A}), so this also works via Homebrew's bin link
+exec zsh -c 'PRATCHETT_NO_ALIAS=1 source "${1:A:h:h}/pratchett.plugin.zsh" && pratchett "${@:2}"' pratchett "$0" "$@"

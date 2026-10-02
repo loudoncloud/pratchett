@@ -86,5 +86,8 @@ check("--help prints usage", run(["--help"]).startswith("usage:"))
 bad = subprocess.run([B, "-x"], capture_output=True, text=True)
 check("bad flag: usage on stderr, exit 1", bad.returncode == 1 and bad.stderr.startswith("usage:") and not bad.stdout)
 check("search treats ? literally", "What had she ever earned?" in run(["-p", "ever earned?"]))
+nozsh = subprocess.run([B, "-s"], capture_output=True, text=True, env={"PATH": "/nonexistent"})
+check("without zsh: helpful message on stderr, exit 127",
+      nozsh.returncode == 127 and "needs zsh" in nozsh.stderr and not nozsh.stdout)
 check("search miss exits 1", subprocess.run([B, "zzqq"], capture_output=True).returncode == 1)
 print("ALL PASS" if ok else "SOME FAILED"); sys.exit(0 if ok else 1)

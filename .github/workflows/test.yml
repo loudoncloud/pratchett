@@ -2,7 +2,9 @@ name: test
 
 on:
   push:
+    branches: ["**"]   # tags are tested by the release workflow
   pull_request:
+  workflow_call:       # used by release.yml
 
 jobs:
   test:
@@ -33,3 +35,7 @@ jobs:
 
       - name: Tab-completion tests
         run: python3 tests/test_completion.py
+
+      - name: Homebrew formula template renders to valid Ruby
+        run: |
+          sed -e 's/@VERSION@/0.0.0/' -e 's/@SHA256@/0000/' packaging/homebrew/pratchett.rb | ruby -c
