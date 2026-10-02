@@ -3,7 +3,7 @@
 Each release's notes are taken from its section here, so add a `## x.y.z` section
 before tagging `vx.y.z`.
 
-## 1.6.0
+## 1.6.0 (2026-10-02)
 
 - `-t`: quote of the day. The same quote all day, a different one tomorrow, and
   every quote comes round before any repeats. Combines with `-b`, `-s` and search.
