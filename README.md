@@ -2,7 +2,7 @@
 
 [![test](https://github.com/loudoncloud/pratchett/actions/workflows/test.yml/badge.svg)](https://github.com/loudoncloud/pratchett/actions/workflows/test.yml)
 
-Random Terry Pratchett quotes for your terminal: 152 lines from across the
+Random Terry Pratchett quotes for your terminal: 213 lines from across the
 Discworld, each one copied verbatim from [Wikiquote](https://en.wikiquote.org/wiki/Discworld)
 with the book it came from.
 

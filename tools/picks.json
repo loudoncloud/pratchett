@@ -8,6 +8,18 @@
   "starts": "The only reason for walking into the jaws of "
  },
  {
+  "book": "The Colour of Magic",
+  "starts": "If complete and utter chaos was lightning, th"
+ },
+ {
+  "book": "The Colour of Magic",
+  "starts": "Some pirates achieved immortality by great de"
+ },
+ {
+  "book": "The Colour of Magic",
+  "starts": "I've seen excitement, and I've seen boredom. "
+ },
+ {
   "book": "The Light Fantastic",
   "starts": "The sun rose slowly, as if it wasn't sure it "
  },
@@ -16,12 +28,37 @@
   "starts": "Early to rise, early to bed, makes a man heal"
  },
  {
+  "book": "The Light Fantastic",
+  "starts": "A Thaum is the basic unit of magical strength"
+ },
+ {
+  "book": "The Light Fantastic",
+  "starts": "THE DEATH OF THE WARRIOR OR THE OLD MAN OR TH",
+  "speaker": "Death"
+ },
+ {
+  "book": "The Light Fantastic",
+  "starts": "Radiating from the book was the light that li"
+ },
+ {
   "book": "Equal Rites",
   "starts": "They say a little knowledge is a dangerous th"
  },
  {
   "book": "Equal Rites",
   "starts": "It is well known that a vital ingredient of s"
+ },
+ {
+  "book": "Equal Rites",
+  "starts": "Time passed, which, basically, is its job."
+ },
+ {
+  "book": "Equal Rites",
+  "starts": "Wizards parted with money slightly less readi"
+ },
+ {
+  "book": "Equal Rites",
+  "starts": "Granny had nothing against fortune-telling pr"
  },
  {
   "book": "Mort",
@@ -34,6 +71,16 @@
  {
   "book": "Mort",
   "starts": "Truly, he thought, the way of enlightenment i"
+ },
+ {
+  "book": "Mort",
+  "starts": "YOU DON'T SEE PEOPLE AT THEIR BEST IN THIS JO",
+  "speaker": "Death"
+ },
+ {
+  "book": "Mort",
+  "starts": "THAT'S MORTALS FOR YOU, Death continued. THEY",
+  "speaker": "Death"
  },
  {
   "book": "Sourcery",
@@ -52,6 +99,10 @@
   "starts": "Death isn't cruel – merely terribly, terribly"
  },
  {
+  "book": "Sourcery",
+  "starts": "Wizards don't like philosophy very much. As f"
+ },
+ {
   "book": "Wyrd Sisters",
   "starts": "Demons were like genies or philosophy profess"
  },
@@ -64,12 +115,33 @@
   "starts": "The duke had a mind that ticked like a clock "
  },
  {
+  "book": "Wyrd Sisters",
+  "starts": "Granny Weatherwax didn't hold with looking at"
+ },
+ {
+  "book": "Wyrd Sisters",
+  "starts": "\"Actors,\" said Granny, witheringly. \"As if th",
+  "speaker": "Granny Weatherwax"
+ },
+ {
   "book": "Pyramids",
   "starts": "There was not a lot that could be done to mak"
  },
  {
   "book": "Pyramids",
   "starts": "Belief is a force. It's a weak force, by comp"
+ },
+ {
+  "book": "Pyramids",
+  "starts": "It was said that life was cheap in Ankh-Morpo"
+ },
+ {
+  "book": "Pyramids",
+  "starts": "Camels gallop by throwing their feet as far a"
+ },
+ {
+  "book": "Pyramids",
+  "starts": "The Ephebians made wine out of anything they "
  },
  {
   "book": "Guards! Guards!",
@@ -104,6 +176,14 @@
   "starts": "\"Multiple exclamation marks,\" he went on, sha"
  },
  {
+  "book": "Eric",
+  "starts": "They were discussing strategy when Rincewind "
+ },
+ {
+  "book": "Eric",
+  "starts": "\"This is really horrible,\" said Eric, as they"
+ },
+ {
   "book": "Moving Pictures",
   "starts": "The senior wizard in a world of magic had the"
  },
@@ -114,6 +194,14 @@
  {
   "book": "Moving Pictures",
   "starts": "Inside every old person is a young person won"
+ },
+ {
+  "book": "Moving Pictures",
+  "starts": "A month went by quickly. It didn't want to ha"
+ },
+ {
+  "book": "Moving Pictures",
+  "starts": "The universe contains any amount of horrible "
  },
  {
   "book": "Reaper Man",
@@ -148,6 +236,15 @@
  {
   "book": "Witches Abroad",
   "starts": "Don't you talk to me about progress. Progress"
+ },
+ {
+  "book": "Witches Abroad",
+  "starts": "It's a strange thing about determined seekers"
+ },
+ {
+  "book": "Witches Abroad",
+  "starts": "\"I ain't against adventure, in moderation,\" s",
+  "speaker": "Granny Weatherwax"
  },
  {
   "book": "Small Gods",
@@ -186,6 +283,15 @@
   "starts": "A wizard's only a priest without a god and a "
  },
  {
+  "book": "Lords and Ladies",
+  "starts": "\"But all them things exist,\" said Nanny Ogg. ",
+  "speaker": "Nanny Ogg"
+ },
+ {
+  "book": "Lords and Ladies",
+  "starts": "The shortest unit of time in the multiverse i"
+ },
+ {
   "book": "Men at Arms",
   "starts": "Dwarfs are very attached to gold. Any highway"
  },
@@ -222,6 +328,10 @@
   "starts": "C. M. O. T. Dibbler liked to be up at first l"
  },
  {
+  "book": "Soul Music",
+  "starts": "It is said that whomsoever the gods wish to d"
+ },
+ {
   "book": "Interesting Times",
   "starts": "According to the philosopher Ly Tin Wheedle, "
  },
@@ -254,6 +364,14 @@
   "starts": "This isn't real life, this is opera."
  },
  {
+  "book": "Maskerade",
+  "starts": "\"Money don't buy happiness, Gytha.\" \"I only w"
+ },
+ {
+  "book": "Maskerade",
+  "starts": "She'd have to shout for help. Of course, some"
+ },
+ {
   "book": "Feet of Clay",
   "starts": "Vimes was good at making the kind of rich ene"
  },
@@ -268,6 +386,11 @@
  {
   "book": "Feet of Clay",
   "starts": "Today is a good day for someone else to die! "
+ },
+ {
+  "book": "Feet of Clay",
+  "starts": "I AM DEATH, NOT TAXES. I TURN UP ONLY ONCE. (",
+  "speaker": "Death"
  },
  {
   "book": "Hogfather",
@@ -345,6 +468,10 @@
   "starts": "Rincewind had never studied meteorology, alth"
  },
  {
+  "book": "The Last Continent",
+  "starts": "He was not going to be found wanting when dut"
+ },
+ {
   "book": "Carpe Jugulum",
   "starts": "Only those with their feet on rock can build "
  },
@@ -378,6 +505,14 @@
  {
   "book": "The Fifth Elephant",
   "starts": "“I believe you vere an alcoholic, Sir Samuel."
+ },
+ {
+  "book": "The Fifth Elephant",
+  "starts": "Vimes hated and despised the privileges of ra"
+ },
+ {
+  "book": "The Fifth Elephant",
+  "starts": "“No crime has been committed!” “I’m a policem"
  },
  {
   "book": "The Truth",
@@ -435,6 +570,14 @@
   "starts": "No one remembers the singer. The song remains"
  },
  {
+  "book": "The Last Hero",
+  "starts": "Their eyes said that wherever it was, they ha"
+ },
+ {
+  "book": "The Last Hero",
+  "starts": "“Oh, Mighty One,” he began, always a safe beg"
+ },
+ {
   "book": "The Amazing Maurice and His Educated Rodents",
   "starts": "“Listen, Peaches, trickery is what humans are",
   "speaker": "Maurice"
@@ -442,6 +585,18 @@
  {
   "book": "The Amazing Maurice and His Educated Rodents",
   "starts": "Maurice watched them argue again. Humans, eh?"
+ },
+ {
+  "book": "The Amazing Maurice and His Educated Rodents",
+  "starts": "What was the point of education, he thought, "
+ },
+ {
+  "book": "The Amazing Maurice and His Educated Rodents",
+  "starts": "She thought animals were just people who hadn"
+ },
+ {
+  "book": "The Amazing Maurice and His Educated Rodents",
+  "starts": "He wasn’t exactly lost, because cats never ge"
  },
  {
   "book": "Night Watch",
@@ -510,6 +665,10 @@
   "starts": "Stopping a battle is much harder than startin"
  },
  {
+  "book": "Monstrous Regiment",
+  "starts": "Look, you know what I mean. You take a bunch "
+ },
+ {
   "book": "A Hat Full of Sky",
   "starts": "Always face what you fear. Have just enough m"
  },
@@ -520,6 +679,14 @@
  {
   "book": "A Hat Full of Sky",
   "starts": "The only hat worth wearing was the one you ma"
+ },
+ {
+  "book": "A Hat Full of Sky",
+  "starts": "Black Meg, the senior nanny, who patiently al"
+ },
+ {
+  "book": "A Hat Full of Sky",
+  "starts": "Knowing things is magical, if other people do"
  },
  {
   "book": "Going Postal",
@@ -563,12 +730,28 @@
   "starts": "“Why do you carry no axe?” Ardent snarled. “I"
  },
  {
+  "book": "Thud!",
+  "starts": "And I’m going home, Vimes repeated to himself"
+ },
+ {
   "book": "Wintersmith",
   "starts": "They say that there can never be two snowflak"
  },
  {
   "book": "Wintersmith",
   "starts": "I’m not superstitious. I’m a witch. Witches a"
+ },
+ {
+  "book": "Wintersmith",
+  "starts": "Look, just because a woman’s got no teeth doe"
+ },
+ {
+  "book": "Wintersmith",
+  "starts": "I made mistakes. But I didn’t make excuses."
+ },
+ {
+  "book": "Wintersmith",
+  "starts": "There be a lot o’ men who became heroes ’cuz "
  },
  {
   "book": "Making Money",
@@ -583,6 +766,14 @@
   "starts": "You get a wonderful view from the point of no"
  },
  {
+  "book": "Making Money",
+  "starts": "It would be hard to imagine an uglier buildin"
+ },
+ {
+  "book": "Making Money",
+  "starts": "Moist pointed to a sign which said If you are"
+ },
+ {
   "book": "Unseen Academicals",
   "starts": "There are those who say that sherry should no"
  },
@@ -593,6 +784,14 @@
  {
   "book": "Unseen Academicals",
   "starts": "“The female mind is certainly a devious one, "
+ },
+ {
+  "book": "Unseen Academicals",
+  "starts": "Tradition is at least as important as bowels,"
+ },
+ {
+  "book": "Unseen Academicals",
+  "starts": "The Librarian was not very familiar with love"
  },
  {
   "book": "I Shall Wear Midnight",
@@ -607,6 +806,14 @@
   "starts": "“Do you believe in luck?” said the Duchess. “"
  },
  {
+  "book": "I Shall Wear Midnight",
+  "starts": "He was hanged, and then much later they put u"
+ },
+ {
+  "book": "I Shall Wear Midnight",
+  "starts": "It is important that we know where we come fr"
+ },
+ {
   "book": "Snuff",
   "starts": "Among his curses was doing the paperwork. The"
  },
@@ -615,13 +822,57 @@
   "starts": "I’m not the law, no policeman is the law. A p"
  },
  {
+  "book": "Snuff",
+  "starts": "The law is there for the people, rather than "
+ },
+ {
+  "book": "Snuff",
+  "starts": "Where there are little crimes, large crimes a"
+ },
+ {
+  "book": "Snuff",
+  "starts": "He was eating a roasted rabbit like there was"
+ },
+ {
   "book": "Raising Steam",
   "starts": "“We can’t just drop everything, sir!” “Mister"
+ },
+ {
+  "book": "Raising Steam",
+  "starts": "It is hard to understand nothing, but the mul"
+ },
+ {
+  "book": "Raising Steam",
+  "starts": "After all, if you can’t trust governments, wh"
+ },
+ {
+  "book": "Raising Steam",
+  "starts": "Moist was, by inclination, a stranger to the "
+ },
+ {
+  "book": "Raising Steam",
+  "starts": "Moist gave up. Too much traveling on the rail"
  },
  {
   "book": "The Shepherd's Crown",
   "starts": "Tiffany sighed. “Being a witch is a man’s job",
   "speaker": "Tiffany Aching"
+ },
+ {
+  "book": "The Shepherd's Crown",
+  "starts": "She had always liked the scullery. It smelled"
+ },
+ {
+  "book": "The Shepherd's Crown",
+  "starts": "If’n people do wrong things, well, why would "
+ },
+ {
+  "book": "The Shepherd's Crown",
+  "starts": "Some folk just don’t want to see the truth, e"
+ },
+ {
+  "book": "The Shepherd's Crown",
+  "starts": "And at the end of time, living is about fight"
  },
  {
   "book": "The Science of Discworld",

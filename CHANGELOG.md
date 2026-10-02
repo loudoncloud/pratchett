@@ -3,6 +3,15 @@
 Each release's notes are taken from its section here, so add a `## x.y.z` section
 before tagging `vx.y.z`.
 
+## 1.7.0
+
+- 61 more quotes, 213 in all: every Discworld novel now has at least five
+  (*Raising Steam* and *The Shepherd's Crown* had one each). All verbatim from
+  Wikiquote; a few candidates with apparent transcription errors were left out
+  rather than corrected from memory.
+- Four more lines from DEATH (now nine), and quotes from Granny Weatherwax and
+  Nanny Ogg that name them.
+
 ## 1.6.0 (2026-10-02)
 
 - `-t`: quote of the day. The same quote all day, a different one tomorrow, and

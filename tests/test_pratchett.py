@@ -136,8 +136,9 @@ os.remove(hist)
 jingo = first_lines(["-b", "Jingo"], 14)
 check("7-quote book: no repeat within any 3 picks in a row",
       all(jingo[i] not in jingo[i - 3:i] for i in range(3, 14)))
-check("1-quote book still works every time",
-      all("Mister Lipwig" in l or "drop everything" in l for l in first_lines(["-b", "Raising Steam"], 3)))
+single = next(bk for bk, n in counts.items() if n == 1)
+check(f"1-quote book still works every time ({single})",
+      len(set(first_lines(["-b", single], 3))) == 1)
 check("1-match search still works every time", all("whole sword" in l for l in first_lines(["whole sword"], 3)))
 os.remove(hist)
 out = subprocess.run([B, "-p"], capture_output=True, text=True, env=dict(os.environ, PRATCHETT_NO_HISTORY="1")).stdout
