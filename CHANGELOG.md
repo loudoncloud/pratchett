@@ -3,7 +3,7 @@
 Each release's notes are taken from its section here, so add a `## x.y.z` section
 before tagging `vx.y.z`.
 
-## 1.3.0
+## 1.3.0 (2026-10-02)
 
 - The `pratchett` command now explains how to install zsh when it's missing,
   instead of failing with `env: zsh: No such file or directory`.
