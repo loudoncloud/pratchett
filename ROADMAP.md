@@ -23,7 +23,7 @@ Tick an item in the same commit that completes it.
 ## Features
 
 - [x] Tab completion (zsh) for options and book titles (1.2.0)
-- [ ] `tp -b <book>`: quotes from one book only; `tp --books` to list the books
+- [x] `tp -b <book>`: quotes from one book only; `tp --books` to list the books (1.4.0)
 - [ ] No repeats: remember recently shown quotes so the startup quote doesn't come round again soon
 - [ ] `tp -t`: quote of the day (the same quote all day, chosen by the date)
 - [ ] More characters drawn by cowsay for their own lines: the Librarian ("Ook."), the Luggage

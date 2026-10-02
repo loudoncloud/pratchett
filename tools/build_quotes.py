@@ -122,6 +122,10 @@ def tidy(t):
 
 
 def attribution(p):
+    # The plugin splits "Speaker, Book" at the first ", ", so neither part may contain one
+    for part in (p.get("speaker"), p["book"]):
+        if part and ", " in part:
+            sys.exit(f"', ' isn't allowed in a book or speaker name: {part!r}")
     return f"{p['speaker']}, {p['book']}" if p.get("speaker") else p["book"]
 
 

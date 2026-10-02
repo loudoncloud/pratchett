@@ -4,7 +4,7 @@
 0="${${(M)0:#/*}:-$PWD/$0}"
 
 typeset -g PRATCHETT_DIR="${0:A:h}"
-typeset -g PRATCHETT_VERSION="1.3.0"
+typeset -g PRATCHETT_VERSION="1.4.0"
 typeset -ga _pratchett_quotes
 
 # Load the quotes once: entries are separated by lines containing only "%"
@@ -61,11 +61,32 @@ _pratchett_rainbow() {
   print -rn -- "$out"
 }
 
+# The book of a quote entry: its last line is "— Book" or "— Speaker, Book"
+_pratchett_book() {
+  REPLY=${${${1##*$'\n'}##[[:space:]]#}#— }
+  [[ $REPLY == *", "* ]] && REPLY=${REPLY#*, }
+}
+
+# All books in collection order, in $reply; counts in $_pratchett_book_counts
+typeset -gA _pratchett_book_counts
+_pratchett_books() {
+  local q
+  reply=()
+  _pratchett_book_counts=()
+  for q in "${_pratchett_quotes[@]}"; do
+    _pratchett_book "$q"
+    (( _pratchett_book_counts[$REPLY]++ )) || reply+=("$REPLY")
+  done
+}
+
 _pratchett_usage() {
-  print -r -- "usage: pratchett [-s] [-d] [-p] [-r] [-n] [-v] [search words...]
+  print -r -- "usage: pratchett [-s] [-d] [-p] [-r] [-n] [-b BOOK] [search words...]
+       pratchett --books | -v | -h
   -s  short quotes only      -d  DEATH says it
   -p  plain, no frame        -r  rainbow
   -n  no colour (also: --no-color, NO_COLOR=1, or output that isn't a terminal)
+  -b  quotes from one book; part of the title is enough (-b jingo, -b \"wee free\")
+  --books  list the books, with how many quotes each has
   -v  print version
   search words pick a random quote containing them (case-insensitive)"
 }
@@ -81,14 +102,32 @@ pratchett() {
       (( ${#${:-─}} == 1 )) && break
     done
   fi
-  local opt short= death= plain= rainbow= nocolor= OPTIND
-  local -a args=("$@")
-  args=("${(@)args/#--no-colo(u|)r/-n}")
-  args=("${(@)args/#--help/-h}")
-  args=("${(@)args/#--version/-v}")
+  local opt short= death= plain= rainbow= nocolor= book= listbooks= OPTIND
+  # Long options, matched as whole words and only before "--"
+  local -a args=()
+  local a
+  integer ended=0
+  for a in "$@"; do
+    if (( ! ended )); then
+      case $a in
+        --) ended=1 ;;
+        --no-color|--no-colour) a=-n ;;
+        --help) a=-h ;;
+        --version) a=-v ;;
+        --books) a=-L ;;
+        --book) a=-b ;;
+        --book=*) args+=(-b); a=${a#--book=} ;;
+      esac
+    fi
+    args+=("$a")
+  done
   set -- "${args[@]}"
-  while getopts ":sdprnvh" opt; do
+  while getopts ":sdprnvhLb:" opt; do
     case $opt in
+      b) book=$OPTARG ;;
+      L) listbooks=1 ;;
+      :) print -u2 -r -- "pratchett: -$OPTARG needs a book title, e.g. -b \"Night Watch\" (see --books)"
+         return 1 ;;
       s) short=1 ;;
       d) death=1 ;;
       p) plain=1 ;;
@@ -106,16 +145,57 @@ pratchett() {
     return 1
   fi
 
+  if [[ -n $listbooks ]]; then
+    _pratchett_books
+    local b dim= reset=
+    [[ -z $nocolor && -z $NO_COLOR && -t 1 ]] && dim=$'\e[2m' reset=$'\e[0m'
+    for b in "${reply[@]}"; do
+      print -r -- "$dim${(l:3:)_pratchett_book_counts[$b]}$reset  $b"
+    done
+    return
+  fi
+
   local -a pool=("${_pratchett_quotes[@]}")
-  (( short )) && pool=(${pool:#?(#c161,)})
-  local note=
-  if (( $# )); then
-    pool=(${(M)pool:#(#i)*$**})
-    if (( ! $#pool )); then
-      print -r -- "No quote mentions “$*”. Ook."
+  local note= scope=
+  if [[ -n $book ]]; then
+    # An exact title (any case) wins; otherwise the one title containing it
+    _pratchett_books
+    local -a hits=(${(M)reply:#(#i)$book})
+    (( $#hits )) || hits=(${(M)reply:#(#i)*$book*})
+    if (( $#hits == 0 )); then
+      print -u2 -r -- "pratchett: no book matches “$book” (see --books)"
+      return 1
+    elif (( $#hits > 1 )); then
+      print -u2 -r -- "pratchett: “$book” matches ${#hits} books: ${(j:, :)hits}"
       return 1
     fi
-    (( $#pool > 1 )) && note="(1 of $#pool matches)"
+    local q
+    local -a inbook=()
+    for q in "${pool[@]}"; do
+      _pratchett_book "$q"
+      [[ $REPLY == $hits[1] ]] && inbook+=("$q")
+    done
+    pool=("${inbook[@]}")
+    scope=" from ${hits[1]}"
+  fi
+  (( short )) && pool=(${pool:#?(#c161,)})
+  if (( $# )); then
+    pool=(${(M)pool:#(#i)*$**})
+  fi
+  if (( ! $#pool )); then
+    if (( $# )); then
+      print -r -- "No quote${scope} mentions “$*”. Ook."
+    else
+      print -r -- "No short quotes${scope}. Ook."
+    fi
+    return 1
+  fi
+  if (( $#pool > 1 )); then
+    if (( $# )); then
+      note="(1 of $#pool matches$scope)"
+    elif [[ -n $scope ]]; then
+      note="(1 of $#pool quotes$scope)"
+    fi
   fi
   local raw=${pool[RANDOM % $#pool + 1]}
 

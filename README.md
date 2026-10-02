@@ -54,13 +54,16 @@ pratchett -p           plain, no frame
 pratchett -d           DEATH says it
 pratchett -n           no colour (also --no-color, or NO_COLOR=1)
 pratchett vimes        a random quote containing "vimes"
+pratchett -b jingo     a quote from one book (part of the title is enough)
+pratchett --books      list the books, with how many quotes each has
 pratchett -v           version
 ```
 
-Options combine: `tp -r -d -s` is a short rainbow quote from DEATH.
+Options combine: `tp -r -d -s` is a short rainbow quote from DEATH, and
+`tp -b "night watch" revolution` searches one book.
 
-Tab completion (zsh) covers the options, and book titles for searching:
-`pratchett Nigh<Tab>` completes to `Night\ Watch`. It works with every install
+Tab completion (zsh) covers the options, and book titles for `-b` and for searching:
+`pratchett -b Nigh<Tab>` completes to `Night\ Watch`. It works with every install
 method below, for both `pratchett` and `tp`.
 
 Colour is only used on a terminal, so `pratchett | pbcopy` or `pratchett > quote.txt`

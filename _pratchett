@@ -11,7 +11,7 @@ fi
 local -a books
 if [[ -r $dir/quotes/pratchett ]]; then
   books=(${(u)${${(M)${(f)"$(<$dir/quotes/pratchett)"}:#    — *}#    — }})
-  books=(${(u)books#Death, })
+  books=(${(u)books#*, })   # drop "Speaker, "
 fi
 
 _arguments -s -S \
@@ -22,6 +22,11 @@ _arguments -s -S \
   '-p[plain, no frame]' \
   '-r[rainbow]' \
   '(-n --no-color)'{-n,--no-color}'[no colour]' \
+  '(-b --book)'{-b+,--book=}'[quotes from one book]:book:->book' \
+  '(- *)--books[list the books, with how many quotes each has]' \
   '*: :->search' && return
 
-[[ $state == search ]] && _wanted books expl 'book title (or any search words)' compadd -a books
+case $state in
+  book)   _wanted books expl 'book' compadd -a books ;;
+  search) _wanted books expl 'book title (or any search words)' compadd -a books ;;
+esac

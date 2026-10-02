@@ -3,6 +3,15 @@
 Each release's notes are taken from its section here, so add a `## x.y.z` section
 before tagging `vx.y.z`.
 
+## 1.4.0
+
+- `-b BOOK` (or `--book BOOK`): quotes from one book. Any case, and part of the
+  title is enough (`-b jingo`, `-b "wee free"`); combines with `-s` and search words.
+- `--books`: list the books, with how many quotes each has.
+- Tab completion offers book titles after `-b`, and the new options.
+- Long options are now matched as whole words, so a search like `-- --helpful`
+  is no longer mistaken for `--help`.
+
 ## 1.3.0 (2026-10-02)
 
 - The `pratchett` command now explains how to install zsh when it's missing,

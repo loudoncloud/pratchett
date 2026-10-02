@@ -6,8 +6,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 ANSI = re.compile(r"\x1b\[[0-9;?]*[a-zA-Z]|\x1b[=>]|\r")
 
-def complete(setup, typed, wait=1.5):
-    """Start zsh with `setup` as its .zshrc, type `typed` + Tab, return the screen text."""
+def complete(setup, typed, wait=1.5, tabs=1):
+    """Start zsh with `setup` as its .zshrc, type `typed` + Tab(s), return the screen text."""
     home = tempfile.mkdtemp()
     # Debian/Ubuntu's /etc/zsh/zshrc runs its own compinit unless told not to
     Path(home, ".zshenv").write_text("skip_global_compinit=1\n")
@@ -25,8 +25,11 @@ def complete(setup, typed, wait=1.5):
                 except OSError: break
         return out.decode(errors="replace")
     read(1.0)
-    os.write(fd, typed.encode() + b"\t")
-    screen = read(wait)
+    os.write(fd, typed.encode())
+    screen = ""
+    for _ in range(tabs):
+        os.write(fd, b"\t")
+        screen += read(wait)
     os.write(fd, b"\x03exit\n"); read(0.3)
     os.close(fd); os.waitpid(pid, 0)
     shutil.rmtree(home, ignore_errors=True)
@@ -57,6 +60,14 @@ s = complete(before, "pratchett -s Nigh")
 check("book completes after a flag (-s Nigh → Night\\ Watch)", "Night\\ Watch" in s, s)
 s = complete(after, "pratchett The\\ We")
 check("multi-word title (The\\ We → The\\ Wee\\ Free\\ Men)", "The\\ Wee\\ Free\\ Men" in s, s)
+s = complete(before, "pratchett -b Nigh")
+check("-b completes book titles (-b Nigh → Night\\ Watch)", "Night\\ Watch" in s, s)
+s = complete(before, "pratchett --book=Thie")
+check("--book= completes book titles", "Thief\\ of\\ Time" in s, s)
+s = complete(before, "pratchett --bo", tabs=2)
+check("--books and --book offered", "--books" in s and "list the books" in s, s)
+s = complete(before, "pratchett -b Terry")
+check("speaker prefix dropped (-b Terry → the tweet's source)", "Twitter" in s and "Death," not in s, s)
 s = complete(before, "pratchett -v ")
 check("nothing offered after -v", "short quotes only" not in s and "book title" not in s, s)
 
