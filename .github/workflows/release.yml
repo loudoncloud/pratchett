@@ -39,6 +39,22 @@ jobs:
           fi
           cat notes.md
 
+      - name: TAP_TOKEN can push to the tap (checked before publishing anything)
+        env:
+          TAP_TOKEN: ${{ secrets.TAP_TOKEN }}
+        run: |
+          if [ -z "$TAP_TOKEN" ]; then
+            echo "::error::The TAP_TOKEN secret is empty or not set (see packaging/homebrew/README.md)"
+            exit 1
+          fi
+          perm=$(curl -sf -H "Authorization: Bearer $TAP_TOKEN" \
+            https://api.github.com/repos/loudoncloud/homebrew-tap | jq -r '.permissions.push // false') || perm=error
+          if [ "$perm" != "true" ]; then
+            echo "::error::TAP_TOKEN can't push to loudoncloud/homebrew-tap (got: $perm). Check its repository access and Contents: Read and write."
+            exit 1
+          fi
+          echo "TAP_TOKEN can push to the tap"
+
       - name: Create the GitHub release
         env:
           GH_TOKEN: ${{ github.token }}
@@ -57,10 +73,6 @@ jobs:
         env:
           TAP_TOKEN: ${{ secrets.TAP_TOKEN }}
         run: |
-          if [ -z "$TAP_TOKEN" ]; then
-            echo "::error::The TAP_TOKEN secret is not set (see packaging/homebrew/README.md)"
-            exit 1
-          fi
           author_name=$(git log -1 --format=%an)
           author_email=$(git log -1 --format=%ae)
           git clone -q "https://x-access-token:$TAP_TOKEN@github.com/loudoncloud/homebrew-tap" tap
