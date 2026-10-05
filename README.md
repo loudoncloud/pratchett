@@ -63,9 +63,10 @@ pratchett -v           version
 Options combine: `tp -r -d -s` is a short rainbow quote from DEATH, and
 `tp -b "night watch" revolution` searches one book.
 
-Tab completion (zsh) covers the options, and book titles for `-b` and for searching:
-`pratchett -b Nigh<Tab>` completes to `Night\ Watch`. It works with every install
-method below, for both `pratchett` and `tp`.
+Tab completion covers the options, and book titles for `-b` and for searching:
+`pratchett -b Nigh<Tab>` completes to `Night\ Watch`. In zsh it works with every
+install method below, for both `pratchett` and `tp`. Bash and fish get it too; see
+[Bash and fish](#bash-and-fish).
 
 With `-t`, everyone on the same version sees the same quote on the same day, and it
 works through every quote before showing one again. It combines with `-b` and `-s`.
@@ -130,6 +131,22 @@ echo 'source ~/.pratchett/pratchett.plugin.zsh' >> ~/.zshrc
 
 Set `PRATCHETT_NO_ALIAS=1` before the plugin loads if you don't want the `tp` alias.
 
+### Bash and fish
+
+The `pratchett` command works from any shell as long as zsh is installed. With
+Homebrew, tab completion for bash and fish is set up automatically (bash needs
+Homebrew's bash-completion set up, as for any formula). Otherwise, from a clone:
+
+```sh
+# bash: add to ~/.bashrc (works with macOS's bash 3.2 too)
+source ~/.pratchett/completions/pratchett.bash
+
+# fish
+cp ~/.pratchett/completions/pratchett.fish ~/.config/fish/completions/
+```
+
+with `~/.pratchett/bin` on your `PATH`.
+
 ## The quotes
 
 Every quote is taken word-for-word from English Wikiquote, which cites the book
@@ -154,7 +171,7 @@ other options.
 
 ```sh
 python3 tests/test_pratchett.py    # the command: colour, widths, DEATH, locale, flags
-python3 tests/test_completion.py   # tab completion, driven through a real zsh
+python3 tests/test_completion.py   # tab completion, driven through real zsh, bash and fish
 ```
 
 Both run in a pseudo-terminal. The width checks render every quote at widths from

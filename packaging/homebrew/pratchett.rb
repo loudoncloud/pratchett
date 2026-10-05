@@ -13,6 +13,8 @@ class Pratchett < Formula
     libexec.install "pratchett.plugin.zsh", "_pratchett", "death.cow", "quotes", "bin"
     bin.install_symlink libexec/"bin/pratchett"
     zsh_completion.install_symlink libexec/"_pratchett"
+    bash_completion.install "completions/pratchett.bash" => "pratchett"
+    fish_completion.install "completions/pratchett.fish"
   end
 
   def caveats
@@ -28,6 +30,8 @@ class Pratchett < Formula
 
   test do
     assert_path_exists zsh_completion/"_pratchett"
+    assert_path_exists bash_completion/"pratchett"
+    assert_path_exists fish_completion/"pratchett.fish"
     assert_match "pratchett #{version}", shell_output("#{bin}/pratchett -v")
     assert_match "— Jingo", shell_output("#{bin}/pratchett -p 'whole sword'")
   end

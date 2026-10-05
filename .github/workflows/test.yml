@@ -16,24 +16,30 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install zsh and cowsay (Linux)
+      - name: Install zsh, cowsay and fish (Linux)
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update -q
-          sudo apt-get install -yq zsh cowsay
+          sudo apt-get install -yq zsh cowsay fish
           echo /usr/games >> "$GITHUB_PATH"
 
-      - name: Install cowsay (macOS)
+      - name: Install cowsay, fish and bash 5 (macOS)
         if: runner.os == 'macOS'
-        run: brew install cowsay
+        run: brew install cowsay fish bash   # bash 5, alongside macOS's /bin/bash 3.2
 
       - name: Syntax check
-        run: zsh -n pratchett.plugin.zsh _pratchett bin/pratchett
+        run: |
+          zsh -n pratchett.plugin.zsh _pratchett
+          sh -n bin/pratchett
+          bash -n completions/pratchett.bash
+          fish --no-execute completions/pratchett.fish
 
       - name: Command tests
         run: python3 tests/test_pratchett.py
 
-      - name: Tab-completion tests
+      - name: Tab-completion tests (zsh, bash, fish)
+        env:
+          PRATCHETT_REQUIRE_SHELLS: bash fish
         run: python3 tests/test_completion.py
 
       - name: Homebrew formula template renders to valid Ruby

@@ -28,7 +28,7 @@ Tick an item in the same commit that completes it.
 - [x] `tp -t`: quote of the day (the same quote all day, chosen by the date) (1.6.0)
 - [ ] More characters drawn by cowsay for their own lines: the Librarian ("Ook."), the Luggage
 - [ ] `tp -c <character>`: quotes by one character (needs the speaker field below)
-- [ ] Bash and fish completion, for people using the standalone command from other shells
+- [x] Bash and fish completion, for people using the standalone command from other shells (1.8.0)
 
 ## Content
 

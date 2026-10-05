@@ -4,7 +4,7 @@
 0="${${(M)0:#/*}:-$PWD/$0}"
 
 typeset -g PRATCHETT_DIR="${0:A:h}"
-typeset -g PRATCHETT_VERSION="1.7.0"
+typeset -g PRATCHETT_VERSION="1.8.0"
 typeset -ga _pratchett_quotes
 
 # Load the quotes once: entries are separated by lines containing only "%"
