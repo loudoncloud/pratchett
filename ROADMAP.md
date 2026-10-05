@@ -41,6 +41,7 @@ Tick an item in the same commit that completes it.
 ## Reaching people
 
 - [ ] List in [awesome-zsh-plugins](https://github.com/unixorn/awesome-zsh-plugins)
+  - Pull request open: [unixorn/awesome-zsh-plugins#2288](https://github.com/unixorn/awesome-zsh-plugins/pull/2288) (2026-10-05); tick when merged.
 - [ ] Propose to oh-my-zsh as a built-in plugin, as `hitchhiker` is (the quotes' CC BY-SA licence may need discussing)
 - [ ] Get into homebrew/core, so `brew search pratchett` finds it without the tap. Needs, per Homebrew's
   [Package Acceptance Policy](https://docs.brew.sh/Package-Acceptance-Policy): a repo at least 30 days old
