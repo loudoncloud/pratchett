@@ -3,7 +3,7 @@
 Each release's notes are taken from its section here, so add a `## x.y.z` section
 before tagging `vx.y.z`.
 
-## 1.7.0
+## 1.7.0 (2026-10-05)
 
 - 61 more quotes, 213 in all: every Discworld novel now has at least five
   (*Raising Steam* and *The Shepherd's Crown* had one each). All verbatim from
