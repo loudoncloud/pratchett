@@ -3,7 +3,7 @@
 Each release's notes are taken from its section here, so add a `## x.y.z` section
 before tagging `vx.y.z`.
 
-## 1.8.0
+## 1.8.0 (2026-10-09)
 
 - Tab completion for bash and fish: options, and book titles for `-b` and search
   words. Bash completion works with macOS's bash 3.2 and doesn't need the
