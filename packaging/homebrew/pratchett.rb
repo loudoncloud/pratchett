@@ -7,6 +7,8 @@ class Pratchett < Formula
   sha256 "@SHA256@"
   license all_of: ["MIT", "CC-BY-SA-4.0"]
 
+  depends_on "cowsay" # DEATH delivers his own lines
+
   uses_from_macos "zsh"
 
   def install
@@ -22,9 +24,6 @@ class Pratchett < Formula
       Run `pratchett` from any shell. For the `tp` alias in zsh (and quotes
       without starting a new process), add this to your ~/.zshrc:
         source #{opt_libexec}/pratchett.plugin.zsh
-
-      For DEATH's own lines to be delivered by DEATH, also install cowsay:
-        brew install cowsay
     EOS
   end
 
@@ -34,5 +33,6 @@ class Pratchett < Formula
     assert_path_exists fish_completion/"pratchett.fish"
     assert_match "pratchett #{version}", shell_output("#{bin}/pratchett -v")
     assert_match "— Jingo", shell_output("#{bin}/pratchett -p 'whole sword'")
+    assert_match "(___/", shell_output("#{bin}/pratchett -d -s") # DEATH, via cowsay
   end
 end

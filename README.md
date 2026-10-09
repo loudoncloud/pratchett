@@ -91,7 +91,9 @@ For a quote in every new terminal, add this to the end of `~/.zshrc`:
 Needs zsh installed (the default shell on macOS; on Linux, `apt install zsh` or your
 distribution's equivalent). It doesn't have to be your login shell: the `pratchett`
 command works from bash, fish and others. [cowsay](https://github.com/cowsay-org/cowsay)
-is optional; without it, DEATH's lines appear in a frame like the rest.
+draws DEATH for his own lines: Homebrew installs it automatically; with the other
+install methods it's optional, and without it DEATH's lines appear in a frame like
+the rest.
 
 **Homebrew**
 

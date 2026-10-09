@@ -8,6 +8,11 @@ before tagging `vx.y.z`.
 - Tab completion for bash and fish: options, and book titles for `-b` and search
   words. Bash completion works with macOS's bash 3.2 and doesn't need the
   bash-completion package. Homebrew installs both.
+- Homebrew now installs `cowsay` along with pratchett, so DEATH's lines are drawn
+  by DEATH without any extra step.
+- Fixed: `pratchett` exited with status 1 after a framed quote, a DEATH quote or a
+  rainbow quote (anything without a "(1 of N …)" note), which broke
+  `pratchett && …` and scripts using `set -e`. It now exits 0.
 
 ## 1.7.0 (2026-10-05)
 

@@ -194,6 +194,12 @@ check("search treats ? literally", "What had she ever earned?" in run(["-p", "ev
 nozsh = subprocess.run([B, "-s"], capture_output=True, text=True, env={"PATH": "/nonexistent"})
 check("without zsh: helpful message on stderr, exit 127",
       nozsh.returncode == 127 and "needs zsh" in nozsh.stderr and not nozsh.stdout)
+modes = ([], ["-s"], ["-p"], ["-d", "-s"], ["-r", "-s"], ["-t"], ["-n"], ["vimes"], ["-b", "Jingo"],
+         ["-d", "-b", "Jingo"], ["-p", "-s"], ["--books"], ["-v"], ["-h"])
+bad = [m for m in modes for cols in ("80", "20")
+       if subprocess.run([B, *m], capture_output=True, env=dict(os.environ, COLUMNS=cols)).returncode != 0]
+check("every output mode exits 0 (framed, plain, DEATH, rainbow, narrow...)", not bad, )
+if bad: print("        nonzero:", bad)
 check("search miss exits 1", subprocess.run([B, "zzqq"], capture_output=True).returncode == 1)
 shutil.rmtree(HISTDIR, ignore_errors=True)
 print("ALL PASS" if ok else "SOME FAILED"); sys.exit(0 if ok else 1)

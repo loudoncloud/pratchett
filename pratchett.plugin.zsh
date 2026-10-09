@@ -301,8 +301,10 @@ pratchett() {
     for l in "${reply[@]}"; do
       print -r -- "${(l:46 - ${(m)#l}:)}$l"
     done
-    [[ -n $note ]] && print -r -- "${(l:46 - ${#note}:)}$dim$note$reset"
-    return
+    if [[ -n $note ]]; then
+      print -r -- "${(l:46 - ${#note}:)}$dim$note$reset"
+    fi
+    return 0
   fi
 
   # Text width: inside a frame (2 border + 4 padding) or indented by 2 when plain
@@ -342,7 +344,9 @@ pratchett() {
     print -rl -- "  "${^out}
     print
     print -rl -- "  "${^srcout}
-    [[ -n $note ]] && print -r -- "  $dim$note$reset"
+    if [[ -n $note ]]; then
+      print -r -- "  $dim$note$reset"
+    fi
     print
     return
   fi
@@ -358,7 +362,10 @@ pratchett() {
     print -r -- "$accent│$reset  $line  $accent│$reset"
   done
   print -r -- "$accent╰$bar╯$reset"
-  [[ -n $note ]] && print -r -- "${(l:w + 6 - ${#note}:)}$dim$note$reset"
+  if [[ -n $note ]]; then
+    print -r -- "${(l:w + 6 - ${#note}:)}$dim$note$reset"
+  fi
+  return 0
 }
 
 # Tab completion: make _pratchett findable, and register it now if compinit
